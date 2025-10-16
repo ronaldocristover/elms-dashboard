@@ -1,0 +1,200 @@
+---
+globs: src/config/theme.js,src/composables/useTheme.js,src/components/ThemeSwitcher.vue
+description: Theme system and dark mode implementation guidelines
+---
+
+# Theme System Guidelines
+
+## 🎨 Centralized Theme Configuration
+
+All colors and theme settings are centralized in [src/config/theme.js](mdc:src/config/theme.js). This allows changing the entire application's appearance by modifying a single file.
+
+## 🎯 Theme Structure
+
+The theme system includes:
+
+### Color Palette
+```javascript
+// Primary colors (Blue)
+primary: {
+  50: '#eff6ff',
+  100: '#dbeafe', 
+  500: '#3b82f6',  // Main primary
+  600: '#2563eb',
+  900: '#1e3a8a'
+}
+
+// Secondary colors (Green)
+secondary: {
+  50: '#ecfdf5',
+  100: '#d1fae5',
+  500: '#10b981',  // Main secondary
+  600: '#059669',
+  900: '#064e3b'
+}
+
+// Accent colors (Orange)
+accent: {
+  50: '#fffbeb',
+  100: '#fef3c7',
+  500: '#f59e0b',  // Main accent
+  600: '#d97706',
+  900: '#92400e'
+}
+```
+
+### Theme Presets
+The system includes 8 predefined theme presets:
+1. **Default** - Blue, Green, Orange
+2. **Professional** - Navy, Teal, Gold
+3. **Modern** - Purple, Pink, Blue
+4. **Minimal** - Slate, Gray, Black
+5. **Vibrant** - Orange, Purple, Pink
+6. **Nature** - Green, Brown, Amber
+7. **Ocean** - Blue, Cyan, Teal
+8. **Sunset** - Orange, Red, Pink
+
+## 🌙 Dark Mode Implementation
+
+Dark mode is managed by [src/composables/useTheme.js](mdc:src/composables/useTheme.js) and toggled via [src/components/ThemeSwitcher.vue](mdc:src/components/ThemeSwitcher.vue).
+
+### Dark Mode Composable
+```javascript
+import { useTheme } from '@/composables/useTheme'
+
+const { isDarkMode, toggleDarkMode, setTheme } = useTheme()
+
+// Toggle dark mode
+toggleDarkMode()
+
+// Set specific theme
+setTheme('professional')
+
+// Check current mode
+console.log(isDarkMode.value) // true/false
+```
+
+### Dark Mode Classes
+Always include dark mode variants in components:
+
+```vue
+<!-- Backgrounds -->
+<div class="bg-white dark:bg-gray-800">
+
+<!-- Text -->
+<p class="text-gray-800 dark:text-gray-100">
+
+<!-- Borders -->
+<div class="border-gray-200 dark:border-gray-700">
+
+<!-- Status badges -->
+<span class="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200">
+```
+
+## 🎨 Using Theme Colors
+
+### Primary Colors
+```vue
+<!-- Primary button -->
+<button class="bg-primary-500 hover:bg-primary-600 text-white">
+
+<!-- Primary text -->
+<p class="text-primary-600 dark:text-primary-400">
+
+<!-- Primary background -->
+<div class="bg-primary-100 dark:bg-primary-900/30">
+```
+
+### Secondary Colors
+```vue
+<!-- Secondary button -->
+<button class="bg-secondary-500 hover:bg-secondary-600 text-white">
+
+<!-- Success states -->
+<span class="bg-secondary-100 dark:bg-secondary-900/30 text-secondary-800 dark:text-secondary-200">
+```
+
+### Accent Colors
+```vue
+<!-- CTA buttons -->
+<button class="bg-accent-500 hover:bg-accent-600 text-white">
+
+<!-- Warning states -->
+<span class="bg-accent-100 dark:bg-accent-900/30 text-accent-800 dark:text-accent-200">
+```
+
+## 🔧 Changing Theme Colors
+
+### Method 1: Edit theme.js
+```javascript
+// src/config/theme.js
+export const theme = {
+  primary: {
+    500: '#3B82F6'  // 👈 Change this color
+  }
+}
+```
+
+### Method 2: Use Theme Switcher
+The [src/components/ThemeSwitcher.vue](mdc:src/components/ThemeSwitcher.vue) component provides a dropdown to switch between predefined themes.
+
+## 📱 Responsive Design
+
+Theme colors work seamlessly with responsive design:
+
+```vue
+<!-- Responsive with theme colors -->
+<div class="bg-primary-500 md:bg-primary-600 lg:bg-primary-700">
+<p class="text-primary-600 sm:text-primary-700 lg:text-primary-800">
+```
+
+## 🎯 Best Practices
+
+### Do:
+- Always include dark mode variants
+- Use theme colors from [src/config/theme.js](mdc:src/config/theme.js)
+- Test both light and dark modes
+- Use consistent color combinations
+- Leverage the centralized theme system
+
+### Don't:
+- Hardcode colors (use theme colors)
+- Forget dark mode variants
+- Mix different color systems
+- Use too many colors (stick to primary, secondary, accent)
+
+## 🔄 Theme Switching
+
+The theme system supports:
+- **Light/Dark mode toggle** - Instant switching
+- **Theme preset switching** - Change entire color scheme
+- **Persistent storage** - Remembers user preference
+- **System preference detection** - Auto-detect OS theme
+
+## 📊 Theme Usage Examples
+
+### Status Indicators
+```vue
+<!-- Success -->
+<span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-secondary-100 dark:bg-secondary-900/30 text-secondary-700 dark:text-secondary-400">
+  Aktif
+</span>
+
+<!-- Warning -->
+<span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-400">
+  Pending
+</span>
+
+<!-- Error -->
+<span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
+  Error
+</span>
+```
+
+### Interactive Elements
+```vue
+<!-- Hover states with theme colors -->
+<button class="bg-primary-500 hover:bg-primary-600 focus:ring-primary-500 text-white">
+<button class="bg-secondary-500 hover:bg-secondary-600 focus:ring-secondary-500 text-white">
+<button class="bg-accent-500 hover:bg-accent-600 focus:ring-accent-500 text-white">
+```

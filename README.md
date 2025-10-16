@@ -1,82 +1,82 @@
 # eLMS Frontend
 
-Aplikasi Learning Management System (LMS) Dashboard yang lengkap dibangun dengan Vue 3, Vite, Tailwind CSS, dan Pinia.
+A complete Learning Management System (LMS) Dashboard built with Vue 3, Vite, Tailwind CSS, and Pinia.
 
-## 🎯 Fitur Utama
+## 🎯 Key Features
 
 ### Authentication
-- 🔐 **Halaman Login** - Form login yang elegant dengan gradient background
-- 🚪 **Logout** - Fungsi logout yang aman
-- 🔒 **Route Guard** - Proteksi halaman dengan authentication guard
+- 🔐 **Login Page** - Elegant login form with gradient background
+- 🚪 **Logout** - Secure logout functionality
+- 🔒 **Route Guard** - Page protection with authentication guard
 
 ### Dashboard
-- 📊 **Dashboard Utama** - Overview statistik dan data terkini
-- 📈 **Statistik Real-time** - Total kursus, member, pendapatan, dan kursus aktif
-- 🎯 **Quick Access** - Akses cepat ke kursus dan member terbaru
-- 💰 **Revenue Tracking** - Tracking pendapatan dari kursus
+- 📊 **Main Dashboard** - Overview statistics and recent data
+- 📈 **Real-time Statistics** - Total courses, members, revenue, and active courses
+- 🎯 **Quick Access** - Quick access to recent courses and members
+- 💰 **Revenue Tracking** - Revenue tracking from courses
 
-### Manajemen Kursus
-- 📚 **Daftar Kursus** - Tabel dengan filter dan search
-- ➕ **Tambah Kursus** - Form untuk menambah kursus baru
-- ✏️ **Edit Kursus** - Update informasi kursus
-- 👁️ **Detail Kursus** - Lihat informasi lengkap kursus
-- 🔍 **Filter & Search** - Filter berdasarkan kategori dan status
-- 🗑️ **Hapus Kursus** - Hapus kursus yang tidak diperlukan
+### Course Management
+- 📚 **Course List** - Table with filters and search
+- ➕ **Add Course** - Form to add new courses
+- ✏️ **Edit Course** - Update course information
+- 👁️ **Course Details** - View complete course information
+- 🔍 **Filter & Search** - Filter by category and status
+- 🗑️ **Delete Course** - Remove unnecessary courses
 
-### Manajemen Member
-- 👥 **Daftar Member** - Tabel dengan filter dan search
-- ➕ **Tambah Member** - Form untuk menambah member baru
-- ✏️ **Edit Member** - Update informasi member
-- 👁️ **Detail Member** - Lihat profil lengkap member
-- 🔍 **Filter & Search** - Filter berdasarkan role dan status
-- 🗑️ **Hapus Member** - Hapus member yang tidak aktif
+### Member Management
+- 👥 **Member List** - Table with filters and search
+- ➕ **Add Member** - Form to add new members
+- ✏️ **Edit Member** - Update member information
+- 👁️ **Member Details** - View complete member profile
+- 🔍 **Filter & Search** - Filter by role and status
+- 🗑️ **Delete Member** - Remove inactive members
 
-### Manajemen Users (Admin, Instructor, Student)
-- 👤 **User Management** - Kelola users dengan 3 role berbeda
-- 🎭 **Role-Based Access** - Admin, Instructor, dan Student role
-- 📝 **User Profiles** - Profil lengkap dengan avatar
-- ✏️ **Profile Management** - Halaman profil untuk user login
-- 🔑 **Password Management** - UI untuk reset/recovery password
+### User Management (Admin, Instructor, Student)
+- 👤 **User Management** - Manage users with 3 different roles
+- 🎭 **Role-Based Access** - Admin, Instructor, and Student roles
+- 📝 **User Profiles** - Complete profiles with avatars
+- ✏️ **Profile Management** - Profile page for logged-in users
+- 🔑 **Password Management** - UI for password reset/recovery
 
-### Module Tambahan (Store Ready)
+### Additional Modules (Store Ready)
 - 📝 **Content Management** - Materials (PDF, video, documents)
 - 📊 **Assessment & Testing** - Quiz, exam, grading system
 - 📈 **Progress Tracking** - Course completion, certificates
 - 📢 **Communication** - Announcements, forums (planned)
 - 💳 **Payment/Billing** - Invoices, subscriptions, payment tracking
 
-### Komponen Reusable
-- 🔘 **BaseButton** - Button dengan berbagai variant (primary, secondary, success, danger, warning, outline)
-- 📋 **BaseTable** - Tabel dengan slot untuk custom cell dan actions
-- 🔎 **SearchInput** - Input pencarian dengan icon
-- 🎚️ **FilterDropdown** - Dropdown filter yang reusable
-- 🍞 **Breadcrumb** - Navigasi breadcrumb untuk setiap halaman
-- 📱 **Sidebar** - Menu navigasi samping yang responsive
+### Reusable Components
+- 🔘 **BaseButton** - Button with various variants (primary, secondary, success, danger, warning, outline)
+- 📋 **BaseTable** - Table with slots for custom cells and actions
+- 🔎 **SearchInput** - Search input with icon
+- 🎚️ **FilterDropdown** - Reusable filter dropdown
+- 🍞 **Breadcrumb** - Breadcrumb navigation for each page
+- 📱 **Sidebar** - Responsive side navigation menu
 
-## 🛠️ Teknologi yang Digunakan
+## 🛠️ Technologies Used
 
-- **Vue 3** - Framework JavaScript progresif dengan Composition API
-- **Vite** - Build tool yang cepat dan modern
-- **Tailwind CSS v3** - Framework CSS utility-first
-- **Pinia** - State management untuk Vue 3
-- **Vue Router** - Official router untuk Vue.js dengan navigation guards
+- **Vue 3** - Progressive JavaScript framework with Composition API
+- **Vite** - Fast and modern build tool
+- **Tailwind CSS v3** - Utility-first CSS framework
+- **Pinia** - State management for Vue 3
+- **Vue Router** - Official router for Vue.js with navigation guards
 
-## 📁 Struktur Project
+## 📁 Project Structure
 
 ```
 elms-frontend/
 ├── src/
-│   ├── assets/              # Asset statis (images, fonts, dll)
-│   ├── components/          # Komponen reusable
+│   ├── assets/              # Static assets (images, fonts, etc.)
+│   ├── components/          # Reusable components
 │   │   ├── BaseButton.vue
 │   │   ├── BaseTable.vue
 │   │   ├── SearchInput.vue
 │   │   ├── FilterDropdown.vue
 │   │   ├── Breadcrumb.vue
-│   │   └── Sidebar.vue (Responsive dengan mobile menu)
+│   │   └── Sidebar.vue (Responsive with mobile menu)
 │   ├── layouts/             # Layout templates
 │   │   └── MainLayout.vue (Responsive layout)
-│   ├── router/              # Konfigurasi Vue Router
+│   ├── router/              # Vue Router configuration
 │   │   └── index.js
 │   ├── stores/              # Pinia stores
 │   │   ├── auth.js          # Authentication
@@ -88,37 +88,37 @@ elms-frontend/
 │   │   ├── progress.js      # Progress tracking & certificates
 │   │   ├── announcements.js # Announcements
 │   │   └── payments.js      # Payments & subscriptions
-│   ├── views/               # Halaman-halaman utama
+│   ├── views/               # Main pages
 │   │   ├── Login.vue
-│   │   ├── Dashboard.vue (dengan revenue tracking)
+│   │   ├── Dashboard.vue (with revenue tracking)
 │   │   ├── Profile.vue      # User profile management
 │   │   ├── courses/
-│   │   │   ├── Index.vue    # Daftar kursus
-│   │   │   ├── Create.vue   # Form tambah kursus
-│   │   │   ├── Edit.vue     # Form edit kursus
-│   │   │   └── Detail.vue   # Detail kursus
+│   │   │   ├── Index.vue    # Course list
+│   │   │   ├── Create.vue   # Add course form
+│   │   │   ├── Edit.vue     # Edit course form
+│   │   │   └── Detail.vue   # Course details
 │   │   ├── members/
-│   │   │   ├── Index.vue    # Daftar member
-│   │   │   ├── Create.vue   # Form tambah member
-│   │   │   ├── Edit.vue     # Form edit member
-│   │   │   └── Detail.vue   # Detail member
+│   │   │   ├── Index.vue    # Member list
+│   │   │   ├── Create.vue   # Add member form
+│   │   │   ├── Edit.vue     # Edit member form
+│   │   │   └── Detail.vue   # Member details
 │   │   └── users/
-│   │       ├── Index.vue    # Daftar users
-│   │       ├── Create.vue   # Form tambah user
-│   │       ├── Edit.vue     # Form edit user
-│   │       └── Detail.vue   # Detail user
+│   │       ├── Index.vue    # User list
+│   │       ├── Create.vue   # Add user form
+│   │       ├── Edit.vue     # Edit user form
+│   │       └── Detail.vue   # User details
 │   ├── App.vue              # Root component
-│   ├── main.js              # Entry point aplikasi
-│   └── style.css            # Global styles dengan Tailwind
-├── public/                  # File publik yang tidak diproses
+│   ├── main.js              # Application entry point
+│   └── style.css            # Global styles with Tailwind
+├── public/                  # Public files not processed
 ├── index.html               # HTML template
-├── package.json             # Dependencies dan scripts
-├── tailwind.config.js       # Konfigurasi Tailwind CSS
-├── postcss.config.js        # Konfigurasi PostCSS
-└── vite.config.js           # Konfigurasi Vite
+├── package.json             # Dependencies and scripts
+├── tailwind.config.js       # Tailwind CSS configuration
+├── postcss.config.js        # PostCSS configuration
+└── vite.config.js           # Vite configuration
 ```
 
-## 🚀 Cara Menjalankan
+## 🚀 How to Run
 
 ### Install Dependencies
 
@@ -133,9 +133,9 @@ npm install
 npm run dev
 ```
 
-Aplikasi akan berjalan di `http://localhost:5173` (atau port lain jika 5173 sedang digunakan)
+The application will run at `http://localhost:5173` (or another port if 5173 is in use)
 
-### Build untuk Production
+### Build for Production
 
 ```bash
 npm run build
@@ -147,44 +147,44 @@ npm run build
 npm run preview
 ```
 
-## 🔐 Cara Login
+## 🔐 How to Login
 
-Untuk demo, Anda dapat menggunakan **username dan password apa saja** untuk login. Sistem akan menyimpan session di localStorage.
+For demo purposes, you can use **any username and password** to login. The system will save the session in localStorage.
 
-Contoh:
+Example:
 - Username: `admin`
 - Password: `admin123`
 
-## 📋 Fitur Tambahan
+## 📋 Additional Features
 
-### Filter dan Search
-Setiap halaman index (daftar) dilengkapi dengan:
-- **Search bar** - Cari berdasarkan nama, email, atau kata kunci lainnya
-- **Filter dropdown** - Filter berdasarkan kategori, status, atau role
-- **Real-time filtering** - Hasil filter dan search ditampilkan secara langsung
+### Filter and Search
+Each index page (list) is equipped with:
+- **Search bar** - Search by name, email, or other keywords
+- **Filter dropdown** - Filter by category, status, or role
+- **Real-time filtering** - Filter and search results displayed instantly
 
 ### Breadcrumb Navigation
-Setiap halaman memiliki breadcrumb untuk memudahkan navigasi:
+Each page has breadcrumbs for easy navigation:
 ```
-Dashboard > Manajemen Kursus > Detail Kursus
+Dashboard > Course Management > Course Details
 ```
 
-### Komponen Based
-Semua komponen dibuat reusable untuk menghindari duplikasi kode:
-- Button dengan berbagai variant dan size
-- Table dengan slot untuk customisasi
-- Form input components yang konsisten
-- Filter dan search yang dapat digunakan di berbagai halaman
+### Component Based
+All components are made reusable to avoid code duplication:
+- Buttons with various variants and sizes
+- Tables with slots for customization
+- Consistent form input components
+- Filters and search that can be used on various pages
 
 ## 🎨 Design System
 
 ### Colors
-- **Primary (Blue)**: Aksi utama, navigasi aktif
-- **Success (Green)**: Status aktif, aksi berhasil
-- **Warning (Yellow)**: Edit, peringatan
-- **Danger (Red)**: Hapus, status nonaktif
-- **Secondary (Gray)**: Aksi sekunder
-- **Purple**: Role instruktur, sertifikat
+- **Primary (Blue)**: Main actions, active navigation
+- **Success (Green)**: Active status, successful actions
+- **Warning (Yellow)**: Edit, warnings
+- **Danger (Red)**: Delete, inactive status
+- **Secondary (Gray)**: Secondary actions
+- **Purple**: Instructor role, certificates
 
 ### Button Variants
 ```vue
@@ -205,77 +205,87 @@ Semua komponen dibuat reusable untuk menghindari duplikasi kode:
 
 ## 🔄 State Management
 
-Menggunakan Pinia untuk state management dengan 3 store:
+Using Pinia for state management with 3 stores:
 
 ### Auth Store
-- `user` - Data user yang login
-- `isAuthenticated` - Status autentikasi
-- `login()` - Fungsi login
-- `logout()` - Fungsi logout
-- `checkAuth()` - Cek status autentikasi
+- `user` - Logged-in user data
+- `isAuthenticated` - Authentication status
+- `login()` - Login function
+- `logout()` - Logout function
+- `checkAuth()` - Check authentication status
 
 ### Courses Store
-- `courses` - Array data kursus
-- `getCourseById()` - Ambil kursus berdasarkan ID
-- `addCourse()` - Tambah kursus baru
-- `updateCourse()` - Update kursus
-- `deleteCourse()` - Hapus kursus
+- `courses` - Array of course data
+- `getCourseById()` - Get course by ID
+- `addCourse()` - Add new course
+- `updateCourse()` - Update course
+- `deleteCourse()` - Delete course
 
 ### Members Store
-- `members` - Array data member
-- `getMemberById()` - Ambil member berdasarkan ID
-- `addMember()` - Tambah member baru
+- `members` - Array of member data
+- `getMemberById()` - Get member by ID
+- `addMember()` - Add new member
 - `updateMember()` - Update member
-- `deleteMember()` - Hapus member
+- `deleteMember()` - Delete member
 
 ## 🛣️ Routing
 
-Aplikasi menggunakan Vue Router dengan authentication guard:
+The application uses Vue Router with authentication guard:
 
 ### Public Routes
-- `/` - Redirect ke login
-- `/login` - Halaman login
+- `/` - Redirect to login
+- `/login` - Login page
 
 ### Protected Routes (Requires Authentication)
-- `/dashboard` - Dashboard utama
-- `/courses` - Daftar kursus
-- `/courses/create` - Form tambah kursus
-- `/courses/:id` - Detail kursus
-- `/courses/:id/edit` - Form edit kursus
-- `/members` - Daftar member
-- `/members/create` - Form tambah member
-- `/members/:id` - Detail member
-- `/members/:id/edit` - Form edit member
+- `/dashboard` - Main dashboard
+- `/courses` - Course list
+- `/courses/create` - Add course form
+- `/courses/:id` - Course details
+- `/courses/:id/edit` - Edit course form
+- `/members` - Member list
+- `/members/create` - Add member form
+- `/members/:id` - Member details
+- `/members/:id/edit` - Edit member form
 
 ## 📱 Responsive Design
 
-Aplikasi **fully responsive** untuk berbagai ukuran layar:
-- **Mobile** (< 768px) - Mobile menu dengan hamburger button
+The application is **fully responsive** for various screen sizes:
+- **Mobile** (< 768px) - Mobile menu with hamburger button
 - **Tablet** (768px - 1024px) - Optimized layout
 - **Desktop** (> 1024px) - Full sidebar navigation
 
 ### Responsive Features:
 - ✅ Mobile-first approach
-- ✅ Hamburger menu untuk mobile
-- ✅ Touch-friendly buttons dan links
-- ✅ Responsive tables (card view di mobile)
-- ✅ Adaptive spacing dan typography
+- ✅ Hamburger menu for mobile
+- ✅ Touch-friendly buttons and links
+- ✅ Responsive tables (card view on mobile)
+- ✅ Adaptive spacing and typography
 - ✅ Collapsible sidebar
 - ✅ Optimized for all screen sizes
 
-## 🔧 Pengembangan Lebih Lanjut
+## 📚 Documentation
 
-Beberapa ide untuk pengembangan selanjutnya:
-- [ ] Integrasi dengan backend REST API
-- [ ] Implementasi real authentication dengan JWT
-- [ ] Upload gambar/file untuk thumbnail dan avatar
-- [ ] Pagination untuk tabel
-- [ ] Export data ke Excel/PDF
-- [ ] Implementasi quiz dan assignment system
-- [ ] Progress tracking untuk siswa
+All comprehensive documentation has been moved to the `doc/` folder for better organization:
+
+- **[📖 Documentation Index](doc/README.md)** - Complete documentation overview and navigation
+- **[🎨 Design & Theme](doc/)** - Design system, theme configuration, and styling guides
+- **[🧩 Components & Features](doc/)** - Form components, dashboard features, and feature lists
+- **[🏗️ Architecture & Modules](doc/)** - System architecture and module documentation
+- **[🚀 Quick References](doc/)** - Code snippets and development guides
+
+## 🔧 Further Development
+
+Some ideas for further development:
+- [ ] Integration with REST API backend
+- [ ] Real authentication implementation with JWT
+- [ ] Image/file upload for thumbnails and avatars
+- [ ] Pagination for tables
+- [ ] Export data to Excel/PDF
+- [ ] Quiz and assignment system implementation
+- [ ] Student progress tracking
 - [ ] Real-time notifications
-- [ ] User profile management dengan photo upload
-- [ ] Advanced analytics dan reporting
+- [ ] User profile management with photo upload
+- [ ] Advanced analytics and reporting
 - [ ] Email notifications
 - [ ] Multi-language support
 - [ ] Dark mode
@@ -286,4 +296,4 @@ MIT
 
 ## 👨‍💻 Developer
 
-Dibuat dengan ❤️ menggunakan Vue 3 dan Tailwind CSS
+Made with ❤️ using Vue 3 and Tailwind CSS

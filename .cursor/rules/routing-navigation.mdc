@@ -1,0 +1,342 @@
+---
+globs: src/router/*.js,src/views/*.vue
+description: Vue Router configuration and navigation patterns
+---
+
+# Routing & Navigation Guidelines
+
+## 🛣️ Router Configuration
+
+The application uses Vue Router with authentication guards configured in [src/router/index.js](mdc:src/router/index.js).
+
+## 🔐 Authentication Guards
+
+All protected routes use the `requiresAuth: true` meta field:
+
+```javascript
+{
+  path: '/dashboard',
+  name: 'Dashboard',
+  component: Dashboard,
+  meta: { requiresAuth: true }
+}
+```
+
+The router automatically redirects unauthenticated users to the login page.
+
+## 📍 Route Structure
+
+### Public Routes
+- `/` - Redirects to login
+- `/login` - Login page
+- `/forgot-password` - Password recovery
+
+### Protected Routes
+- `/dashboard` - Main dashboard
+- `/profile` - User profile
+- `/form-demo` - Form components showcase
+
+### Module Routes (CRUD Pattern)
+Each module follows a consistent CRUD pattern:
+
+#### Courses Module
+- `/courses` - List courses (with pagination)
+- `/courses/create` - Create new course
+- `/courses/:id` - View course details
+- `/courses/:id/edit` - Edit course
+
+#### Members Module
+- `/members` - List members
+- `/members/create` - Create new member
+- `/members/:id` - View member details
+- `/members/:id/edit` - Edit member
+
+#### Users Module
+- `/users` - List users
+- `/users/create` - Create new user
+- `/users/:id` - View user details
+- `/users/:id/edit` - Edit user
+
+## 🧭 Navigation Patterns
+
+### Programmatic Navigation
+```javascript
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+// Navigate to route
+router.push('/dashboard')
+
+// Navigate with params
+router.push(`/courses/${courseId}/edit`)
+
+// Navigate with query
+router.push({ 
+  path: '/courses', 
+  query: { category: 'programming' } 
+})
+
+// Replace current route
+router.replace('/login')
+
+// Go back
+router.back()
+```
+
+### Route Parameters
+```javascript
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+// Get route params
+const courseId = route.params.id
+
+// Get query params
+const category = route.query.category
+
+// Watch for route changes
+watch(() => route.params.id, (newId) => {
+  // Handle parameter change
+})
+```
+
+## 🍞 Breadcrumb Navigation
+
+Use the [src/components/Breadcrumb.vue](mdc:src/components/Breadcrumb.vue) component for consistent navigation:
+
+```vue
+<template>
+  <Breadcrumb :items="breadcrumbs" />
+</template>
+
+<script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const breadcrumbs = computed(() => {
+  const items = [
+    { label: 'Dashboard', to: '/dashboard' }
+  ]
+  
+  if (route.name === 'CoursesIndex') {
+    items.push({ label: 'Kursus' })
+  } else if (route.name === 'CoursesCreate') {
+    items.push(
+      { label: 'Kursus', to: '/courses' },
+      { label: 'Tambah Kursus' }
+    )
+  } else if (route.name === 'CoursesEdit') {
+    items.push(
+      { label: 'Kursus', to: '/courses' },
+      { label: 'Edit Kursus' }
+    )
+  }
+  
+  return items
+})
+</script>
+```
+
+## 🔄 Route Guards
+
+### Global Guards
+The router includes global guards for authentication:
+
+```javascript
+// Before each route
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+  
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    next('/login')
+  } else {
+    next()
+  }
+})
+```
+
+### Component Guards
+Use component guards for specific route logic:
+
+```javascript
+// Before route enter
+onBeforeRouteEnter((to, from, next) => {
+  // Check permissions
+  if (hasPermission(to.params.id)) {
+    next()
+  } else {
+    next('/unauthorized')
+  }
+})
+
+// Before route leave
+onBeforeRouteLeave((to, from, next) => {
+  if (hasUnsavedChanges.value) {
+    if (confirm('You have unsaved changes. Are you sure?')) {
+      next()
+    } else {
+      next(false)
+    }
+  } else {
+    next()
+  }
+})
+```
+
+## 🎯 Navigation Components
+
+### Sidebar Navigation
+The [src/components/Sidebar.vue](mdc:src/components/Sidebar.vue) provides main navigation:
+
+```javascript
+const menuItems = [
+  {
+    label: 'Dashboard',
+    to: '/dashboard',
+    icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
+  },
+  {
+    label: 'Manajemen Kursus',
+    to: '/courses',
+    icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'
+  }
+  // ... more items
+]
+```
+
+### Active Route Highlighting
+```vue
+<template>
+  <router-link
+    :to="item.to"
+    :class="[
+      'flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors',
+      $route.path === item.to
+        ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
+        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+    ]"
+  >
+    {{ item.label }}
+  </router-link>
+</template>
+```
+
+## 📱 Responsive Navigation
+
+### Mobile Menu
+The sidebar includes responsive behavior:
+
+```vue
+<template>
+  <!-- Mobile menu button -->
+  <button
+    @click="isOpen = !isOpen"
+    class="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+
+  <!-- Sidebar with responsive classes -->
+  <div
+    :class="[
+      'h-screen w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 fixed left-0 top-0 flex flex-col z-40 transition-transform duration-300',
+      isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+    ]"
+  >
+    <!-- Sidebar content -->
+  </div>
+</template>
+```
+
+## 🔄 Route Transitions
+
+### Page Transitions
+Add smooth transitions between routes:
+
+```vue
+<template>
+  <router-view v-slot="{ Component }">
+    <transition name="page" mode="out-in">
+      <component :is="Component" />
+    </transition>
+  </router-view>
+</template>
+
+<style>
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.3s ease;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+</style>
+```
+
+## 🎯 Navigation Best Practices
+
+### Do:
+- Use consistent route naming
+- Follow CRUD pattern for modules
+- Include breadcrumbs for deep navigation
+- Handle authentication guards properly
+- Use semantic route names
+- Provide clear navigation feedback
+
+### Don't:
+- Create deep nested routes (max 3 levels)
+- Forget to handle route parameters
+- Skip authentication checks
+- Use hardcoded URLs
+- Forget responsive navigation
+- Ignore route transitions
+
+## 📊 Route Examples
+
+### Dynamic Routes with Parameters
+```javascript
+// Route definition
+{
+  path: '/courses/:id/edit',
+  name: 'CoursesEdit',
+  component: CoursesEdit,
+  meta: { requiresAuth: true }
+}
+
+// Navigation
+router.push(`/courses/${courseId}/edit`)
+
+// Accessing params
+const courseId = route.params.id
+```
+
+### Query Parameters
+```javascript
+// Navigation with query
+router.push({
+  path: '/courses',
+  query: { 
+    category: 'programming',
+    status: 'active',
+    page: 1
+  }
+})
+
+// Accessing query
+const category = route.query.category
+const status = route.query.status
+const page = route.query.page
+```

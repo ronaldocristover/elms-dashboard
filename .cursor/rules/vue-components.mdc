@@ -1,38 +1,13 @@
 ---
 globs: *.vue
-description: Vue component development guidelines and best practices
+description: Vue component development guidelines and patterns
 ---
 
 # Vue Component Guidelines
 
-## Composition API Standards
+## 🧩 Component Structure
 
-Always use Vue 3 Composition API with `<script setup>`:
-
-```vue
-<script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-const data = ref([])
-const isLoading = ref(false)
-
-const filteredData = computed(() => {
-  // computed logic
-})
-
-onMounted(() => {
-  // initialization
-})
-</script>
-```
-
-## Component Structure Order
-
-1. **Template** - Always first
-2. **Script Setup** - Second
-3. **Style** (if needed) - Last, use Tailwind classes instead when possible
+Always follow this structure for Vue components:
 
 ```vue
 <template>
@@ -41,228 +16,108 @@ onMounted(() => {
 
 <script setup>
 // Imports
-// Props/Emits
-// State (ref, reactive)
-// Computed
+import { ref, computed, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
+// Props
+const props = defineProps({
+  // Define props with types and defaults
+})
+
+// Emits
+const emit = defineEmits(['update:modelValue', 'confirm'])
+
+// Reactive data
+const data = ref('')
+
+// Computed properties
+const computedValue = computed(() => {
+  // Computation logic
+})
+
 // Methods
-// Lifecycle hooks
+const handleAction = () => {
+  // Method logic
+}
 </script>
 
 <style scoped>
-/* Minimal custom styles, prefer Tailwind */
+/* Component-specific styles if needed */
 </style>
 ```
 
-## Props and Emits
+## 🎨 Styling Guidelines
 
-### Props Definition
-```vue
-<script setup>
-const props = defineProps({
-  modelValue: {
-    type: String,
-    default: ''
-  },
-  size: {
-    type: String,
-    default: 'md',
-    validator: (value) => ['sm', 'md', 'lg'].includes(value)
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  }
-})
-</script>
-```
-
-### Emits Definition
-```vue
-<script setup>
-const emit = defineEmits(['update:modelValue', 'click'])
-
-const handleClick = () => {
-  emit('click', event)
-}
-</script>
-```
-
-## Reusable Components Pattern
-
-See [BaseButton.vue](mdc:src/components/BaseButton.vue) and [BaseTable.vue](mdc:src/components/BaseTable.vue) as examples.
-
-### Key Principles:
-1. **Props for Configuration** - Use props for variants, sizes, states
-2. **Slots for Content** - Use slots for flexible content insertion
-3. **Emits for Events** - Emit events instead of direct DOM manipulation
-4. **Computed for Dynamic Classes** - Use computed for conditional styling
-
-## Page Components (Views)
-
-Page components should:
-1. **Use MainLayout** wrapper
-2. **Include Breadcrumb** at the top
-3. **Be responsive** - mobile, tablet, desktop
-4. **Use stores** for data management
-5. **Handle loading states**
-
-Example pattern from [src/views/users/Index.vue](mdc:src/views/users/Index.vue):
+### Always Include Dark Mode
+Every component must support dark mode using Tailwind's `dark:` prefix:
 
 ```vue
-<template>
-  <MainLayout>
-    <Breadcrumb :items="breadcrumbs" />
-    
-    <div class="mb-4 md:mb-6">
-      <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Title</h1>
-      <p class="text-sm md:text-base text-gray-600 mt-1">Description</p>
-    </div>
-
-    <!-- Filter and Search -->
-    <div class="bg-white p-3 md:p-4 rounded-lg shadow mb-4 md:mb-6">
-      <SearchInput v-model="searchQuery" />
-      <FilterDropdown v-model="filter" :options="options" />
-    </div>
-
-    <!-- Table for Desktop -->
-    <div class="hidden md:block">
-      <BaseTable :columns="columns" :data="data">
-        <!-- Custom slots -->
-      </BaseTable>
-    </div>
-
-    <!-- Cards for Mobile -->
-    <div class="block md:hidden">
-      <!-- Mobile card view -->
-    </div>
-  </MainLayout>
-</template>
-
-<script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import MainLayout from '@/layouts/MainLayout.vue'
-import Breadcrumb from '@/components/Breadcrumb.vue'
-// ... other imports
-</script>
+<div class="bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100">
 ```
 
-## Responsive Design in Components
-
-### Tailwind Responsive Classes
-```vue
-<!-- Mobile-first approach -->
-<div class="p-4 md:p-6 lg:p-8">
-  <h1 class="text-xl md:text-2xl lg:text-3xl">Responsive Heading</h1>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-    <!-- Grid content -->
-  </div>
-</div>
-```
-
-### Show/Hide on Different Screens
-```vue
-<!-- Show only on mobile -->
-<div class="block md:hidden">Mobile content</div>
-
-<!-- Show only on desktop -->
-<div class="hidden md:block">Desktop content</div>
-
-<!-- Different layouts -->
-<div class="flex flex-col md:flex-row gap-3 md:gap-4">
-  <!-- Responsive flex direction -->
-</div>
-```
-
-## Store Usage in Components
+### Use Theme Colors
+Reference colors from [src/config/theme.js](mdc:src/config/theme.js):
 
 ```vue
-<script setup>
-import { useUsersStore } from '@/stores/users'
-import { useAuthStore } from '@/stores/auth'
+<!-- Primary colors -->
+<div class="bg-primary-500 text-primary-600">
+<div class="bg-primary-100 dark:bg-primary-900/30">
 
-const usersStore = useUsersStore()
-const authStore = useAuthStore()
+<!-- Secondary colors -->
+<div class="bg-secondary-500 text-secondary-600">
 
-// Access store state
-const users = computed(() => usersStore.users)
-
-// Call store actions
-const handleDelete = (id) => {
-  usersStore.deleteUser(id)
-}
-</script>
+<!-- Accent colors -->
+<div class="bg-accent-500 text-accent-600">
 ```
 
-## Router Usage
+### Consistent Spacing
+- Use `p-6` for card padding
+- Use `mb-6` for section margins
+- Use `gap-6` for grid/flex gaps
+- Use `space-y-6` for vertical spacing
 
-```vue
-<script setup>
-import { useRouter, useRoute } from 'vue-router'
+### Consistent Shadows
+- Use `shadow-soft` for cards
+- Use `shadow-soft-md` for elevated elements
+- Use `shadow-soft-lg` for modals
 
-const router = useRouter()
-const route = useRoute()
+## 🔧 Component Patterns
 
-// Navigate programmatically
-const goToDetail = (id) => {
-  router.push(`/users/${id}`)
-}
+### Form Components
+All form components should:
+- Support `v-model` with `modelValue` prop and `update:modelValue` emit
+- Include `label`, `required`, `placeholder` props
+- Support dark mode
+- Include proper focus states
 
-// Access route params
-const userId = route.params.id
-</script>
-```
+### Button Components
+Use [src/components/BaseButton.vue](mdc:src/components/BaseButton.vue) with variants:
+- `primary` - Main actions
+- `secondary` - Secondary actions  
+- `outline` - Cancel/back actions
+- `danger` - Delete actions
+- `warning` - Edit actions
+- `accent` - CTA actions
 
-## Form Handling
+### Modal Components
+Use [src/components/ConfirmModal.vue](mdc:src/components/ConfirmModal.vue) for confirmations:
+- `danger` - Delete confirmations
+- `warning` - Logout/edit confirmations
+- `info` - Information
+- `success` - Success messages
 
-```vue
-<template>
-  <form @submit.prevent="handleSubmit">
-    <input
-      v-model="form.name"
-      type="text"
-      required
-      class="w-full px-3 md:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-    />
-    
-    <BaseButton type="submit">Save</BaseButton>
-  </form>
-</template>
+## 📱 Responsive Design
 
-<script setup>
-import { ref } from 'vue'
+Always make components responsive:
+- Use `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` for grids
+- Use `flex-col sm:flex-row` for flexible layouts
+- Use `text-sm sm:text-base` for responsive text
+- Use `p-4 sm:p-6` for responsive padding
 
-const form = ref({
-  name: '',
-  email: '',
-  // ... other fields
-})
+## 🎯 Accessibility
 
-const handleSubmit = () => {
-  // Handle form submission
-  console.log(form.value)
-}
-</script>
-```
-
-## Do's and Don'ts
-
-### ✅ Do:
-- Use Composition API with `<script setup>`
-- Use Tailwind CSS classes for styling
-- Make components responsive (mobile-first)
-- Use computed for derived state
-- Emit events from child components
-- Use slots for flexible content
-- Handle loading and error states
-- Use stores for shared state
-
-### ❌ Don't:
-- Use Options API (use Composition API)
-- Write custom CSS (use Tailwind)
-- Forget mobile responsiveness
-- Mutate props directly
-- Use jQuery or DOM manipulation
-- Create large monolithic components
-- Ignore loading states
-- Hardcode data in components
+- Always include proper `label` attributes
+- Use semantic HTML elements
+- Include `aria-*` attributes where needed
+- Ensure keyboard navigation works
+- Use proper color contrast ratios

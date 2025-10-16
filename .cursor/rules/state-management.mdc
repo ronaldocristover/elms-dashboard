@@ -1,0 +1,315 @@
+---
+globs: src/stores/*.js
+description: Pinia store patterns and state management guidelines
+---
+
+# State Management Guidelines
+
+## 🏪 Pinia Store Structure
+
+The application uses Pinia for state management with stores located in [src/stores/](mdc:src/stores/).
+
+## 📁 Store Files
+
+### Core Stores
+- [src/stores/auth.js](mdc:src/stores/auth.js) - Authentication state and user management
+- [src/stores/courses.js](mdc:src/stores/courses.js) - Course management with CRUD operations
+- [src/stores/members.js](mdc:src/stores/members.js) - Member management
+- [src/stores/users.js](mdc:src/stores/users.js) - User management with roles
+
+### Extended Module Stores
+- [src/stores/materials.js](mdc:src/stores/materials.js) - Learning materials management
+- [src/stores/assessments.js](mdc:src/stores/assessments.js) - Assessment and testing
+- [src/stores/progress.js](mdc:src/stores/progress.js) - Progress tracking
+- [src/stores/announcements.js](mdc:src/stores/announcements.js) - Communication
+- [src/stores/payments.js](mdc:src/stores/payments.js) - Payment and billing
+
+## 🏗️ Store Pattern
+
+All stores follow this consistent pattern:
+
+```javascript
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+
+export const useExampleStore = defineStore('example', () => {
+  // State
+  const items = ref([])
+  const loading = ref(false)
+  const error = ref(null)
+
+  // Getters
+  const activeItems = computed(() => 
+    items.value.filter(item => item.status === 'active')
+  )
+
+  const totalItems = computed(() => items.value.length)
+
+  // Actions
+  const fetchItems = async () => {
+    loading.value = true
+    error.value = null
+    try {
+      // API call
+      const response = await api.get('/items')
+      items.value = response.data
+    } catch (err) {
+      error.value = err.message
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const addItem = async (itemData) => {
+    try {
+      const response = await api.post('/items', itemData)
+      items.value.push(response.data)
+      return response.data
+    } catch (err) {
+      error.value = err.message
+      throw err
+    }
+  }
+
+  const updateItem = async (id, itemData) => {
+    try {
+      const response = await api.put(`/items/${id}`, itemData)
+      const index = items.value.findIndex(item => item.id === id)
+      if (index !== -1) {
+        items.value[index] = response.data
+      }
+      return response.data
+    } catch (err) {
+      error.value = err.message
+      throw err
+    }
+  }
+
+  const deleteItem = async (id) => {
+    try {
+      await api.delete(`/items/${id}`)
+      items.value = items.value.filter(item => item.id !== id)
+    } catch (err) {
+      error.value = err.message
+      throw err
+    }
+  }
+
+  return {
+    // State
+    items,
+    loading,
+    error,
+    // Getters
+    activeItems,
+    totalItems,
+    // Actions
+    fetchItems,
+    addItem,
+    updateItem,
+    deleteItem
+  }
+})
+```
+
+## 🔐 Authentication Store
+
+The [src/stores/auth.js](mdc:src/stores/auth.js) store handles:
+
+```javascript
+// Usage in components
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
+
+// Check authentication
+if (authStore.isAuthenticated) {
+  // User is logged in
+}
+
+// Get current user
+const user = authStore.user
+
+// Login
+await authStore.login(credentials)
+
+// Logout
+authStore.logout()
+```
+
+### Auth Store Features:
+- User authentication state
+- JWT token management
+- User profile data
+- Role-based access control
+- Persistent login state
+
+## 📚 Course Store
+
+The [src/stores/courses.js](mdc:src/stores/courses.js) provides:
+
+```javascript
+import { useCoursesStore } from '@/stores/courses'
+
+const coursesStore = useCoursesStore()
+
+// Fetch all courses
+await coursesStore.fetchCourses()
+
+// Get filtered courses
+const filteredCourses = computed(() => 
+  coursesStore.getFilteredCourses(searchQuery.value, categoryFilter.value)
+)
+
+// Add new course
+await coursesStore.addCourse(courseData)
+
+// Update course
+await coursesStore.updateCourse(courseId, courseData)
+
+// Delete course
+await coursesStore.deleteCourse(courseId)
+```
+
+## 👥 User Management
+
+The [src/stores/users.js](mdc:src/stores/users.js) handles user roles:
+
+### User Roles:
+- **Admin** - Full system access
+- **Instructor** - Course management
+- **Student** - Course enrollment
+
+```javascript
+import { useUsersStore } from '@/stores/users'
+
+const usersStore = useUsersStore()
+
+// Get users by role
+const admins = computed(() => usersStore.getUsersByRole('admin'))
+const instructors = computed(() => usersStore.getUsersByRole('instructor'))
+const students = computed(() => usersStore.getUsersByRole('student'))
+```
+
+## 🎯 Store Usage in Components
+
+### Basic Usage
+```vue
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useCoursesStore } from '@/stores/courses'
+
+const coursesStore = useCoursesStore()
+
+// Reactive state from store
+const courses = computed(() => coursesStore.courses)
+const loading = computed(() => coursesStore.loading)
+
+// Local component state
+const searchQuery = ref('')
+
+// Computed with store data
+const filteredCourses = computed(() => 
+  courses.value.filter(course => 
+    course.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+)
+
+// Load data on mount
+onMounted(() => {
+  coursesStore.fetchCourses()
+})
+</script>
+```
+
+### With Error Handling
+```vue
+<script setup>
+import { useCoursesStore } from '@/stores/courses'
+
+const coursesStore = useCoursesStore()
+
+const handleAddCourse = async (courseData) => {
+  try {
+    await coursesStore.addCourse(courseData)
+    // Success - maybe show toast or redirect
+    router.push('/courses')
+  } catch (error) {
+    // Error handling - show error message
+    console.error('Failed to add course:', error)
+  }
+}
+</script>
+```
+
+## 🔄 Data Flow
+
+### Typical CRUD Flow:
+1. **Component** calls store action
+2. **Store** makes API request
+3. **Store** updates state
+4. **Component** reacts to state changes
+5. **UI** updates automatically
+
+### Example Flow:
+```javascript
+// 1. Component triggers action
+const handleSubmit = async () => {
+  // 2. Store action
+  await coursesStore.addCourse(formData)
+  // 3. Store updates state
+  // 4. Component automatically updates
+  // 5. UI reflects changes
+}
+```
+
+## 📊 Store Best Practices
+
+### Do:
+- Use reactive refs for state
+- Use computed for derived state
+- Handle loading and error states
+- Provide clear action names
+- Return promises from async actions
+- Use consistent naming conventions
+
+### Don't:
+- Mutate state directly (use actions)
+- Forget error handling
+- Mix local and store state unnecessarily
+- Create circular dependencies
+- Forget to handle loading states
+
+## 🎨 Integration with UI
+
+### Loading States
+```vue
+<template>
+  <div v-if="loading" class="flex justify-center">
+    <div class="animate-spin h-8 w-8 text-primary-600">Loading...</div>
+  </div>
+  
+  <div v-else-if="error" class="text-red-600">
+    Error: {{ error }}
+  </div>
+  
+  <div v-else>
+    <!-- Content -->
+  </div>
+</template>
+```
+
+### Error Handling
+```vue
+<script setup>
+const handleAction = async () => {
+  try {
+    await store.performAction()
+    // Success
+  } catch (error) {
+    // Show error to user
+    showErrorModal(error.message)
+  }
+}
+</script>
+```

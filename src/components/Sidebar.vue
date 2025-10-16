@@ -2,39 +2,41 @@
   <!-- Mobile Menu Button -->
   <button
     @click="toggleSidebar"
-    class="lg:hidden fixed top-4 left-4 z-50 p-2.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-lg shadow-soft-md hover:shadow-soft-lg"
+    class="lg:hidden fixed top-4 left-4 z-50 p-2.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-lg shadow-soft-md hover:shadow-soft-lg transition-all duration-200"
   >
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
+    <i class="fas fa-bars w-6 h-6"></i>
+  </button>
+
+  <!-- Desktop Toggle Button -->
+  <button
+    @click="toggleSidebar"
+    class="hidden lg:flex fixed top-4 left-4 z-50 p-2.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-lg shadow-soft-md hover:shadow-soft-lg transition-all duration-200"
+    :class="isCollapsed ? 'left-4' : 'left-60'"
+  >
+    <i :class="isCollapsed ? 'fas fa-chevron-right' : 'fas fa-chevron-left'" class="w-5 h-5"></i>
   </button>
 
   <!-- Overlay for Mobile -->
   <div
-    v-if="isOpen"
-    @click="toggleSidebar"
-    class="lg:hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-40 backdrop-blur-sm"
+    v-if="isOpen && isMobile"
+    @click="closeSidebar"
+    class="lg:hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-40 backdrop-blur-sm transition-opacity duration-300"
   ></div>
 
   <!-- Sidebar -->
-  <div
-    :class="[
-      'h-screen w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 fixed left-0 top-0 flex flex-col z-40 transition-transform duration-300',
-      isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-    ]"
-  >
+  <div :class="sidebarClasses">
     <!-- Logo -->
     <div class="p-6 border-b border-gray-200 dark:border-gray-800">
-      <div class="flex items-center space-x-3">
+      <div class="flex items-center" :class="isCollapsed ? 'justify-center' : 'space-x-3'">
         <img 
           src="/sample-logo.jpg" 
           alt="LMS Logo" 
-          class="w-10 h-10 rounded-lg shadow-soft object-cover"
+          class="w-10 h-10 rounded-lg shadow-soft object-cover flex-shrink-0"
           @error="handleImageError"
         />
-        <div>
-          <h1 class="text-lg font-bold text-gray-800 dark:text-gray-100">LMS Dashboard</h1>
-          <p class="text-xs text-gray-500 dark:text-gray-400">Learning System</p>
+        <div v-if="!isCollapsed" class="min-w-0">
+          <h1 class="text-lg font-bold text-gray-800 dark:text-gray-100 truncate">LMS Dashboard</h1>
+          <p class="text-xs text-gray-500 dark:text-gray-400 truncate">Learning System</p>
         </div>
       </div>
     </div>
@@ -46,13 +48,20 @@
         :key="item.to"
         :to="item.to"
         @click="closeSidebarOnMobile"
-        class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors group"
+        class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors group relative"
         active-class="bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 font-medium"
+        :title="isCollapsed ? item.label : ''"
       >
-        <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.icon" />
-        </svg>
-        <span class="truncate">{{ item.label }}</span>
+        <i :class="`fas fa-${item.icon} w-5 h-5 flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`"></i>
+        <span v-if="!isCollapsed" class="truncate">{{ item.label }}</span>
+        
+        <!-- Tooltip for collapsed state -->
+        <div 
+          v-if="isCollapsed" 
+          class="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
+        >
+          {{ item.label }}
+        </div>
       </router-link>
     </nav>
 
@@ -97,19 +106,17 @@
         @click="showLogoutModal = true"
         class="w-full flex items-center justify-center px-4 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-medium"
       >
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-        </svg>
+        <i class="fas fa-sign-out-alt w-5 h-5 mr-2"></i>
         <span class="text-sm">Logout</span>
       </button>
 
     <!-- Logout Confirmation Modal -->
     <ConfirmModal
       v-model="showLogoutModal"
-      title="Konfirmasi Logout"
-      message="Apakah Anda yakin ingin keluar dari aplikasi?"
-      confirm-text="Ya, Logout"
-      cancel-text="Batal"
+      title="Confirm Logout"
+      message="Are you sure you want to logout from the application?"
+      confirm-text="Yes, Logout"
+      cancel-text="Cancel"
       type="warning"
       @confirm="handleLogout"
     />
@@ -122,44 +129,52 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useTheme } from '../composables/useTheme'
+import { useSidebar } from '../composables/useSidebar'
 import ConfirmModal from './ConfirmModal.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const { isDarkMode, toggleDarkMode } = useTheme()
-const isOpen = ref(false)
+const { 
+  isOpen, 
+  isCollapsed, 
+  isMobile, 
+  sidebarClasses, 
+  toggleSidebar, 
+  closeSidebar 
+} = useSidebar()
 const showLogoutModal = ref(false)
 
 const menuItems = [
   {
     label: 'Dashboard',
     to: '/dashboard',
-    icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
+    icon: 'chart-line'
   },
   {
-    label: 'Manajemen Kursus',
+    label: 'Course Management',
     to: '/courses',
-    icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'
+    icon: 'graduation-cap'
   },
   {
-    label: 'Manajemen Member',
+    label: 'Member Management',
     to: '/members',
-    icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'
+    icon: 'users'
   },
   {
-    label: 'Manajemen Users',
+    label: 'User Management',
     to: '/users',
-    icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
+    icon: 'user-cog'
   },
   {
     label: 'Form Components',
     to: '/form-demo',
-    icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+    icon: 'file-alt'
   },
   {
-    label: 'Profil Saya',
+    label: 'My Profile',
     to: '/profile',
-    icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'
+    icon: 'user-circle'
   }
 ]
 
@@ -167,13 +182,9 @@ const userInitial = computed(() => {
   return authStore.user?.name?.charAt(0).toUpperCase() || 'U'
 })
 
-const toggleSidebar = () => {
-  isOpen.value = !isOpen.value
-}
-
 const closeSidebarOnMobile = () => {
-  if (window.innerWidth < 1024) {
-    isOpen.value = false
+  if (isMobile.value) {
+    closeSidebar()
   }
 }
 

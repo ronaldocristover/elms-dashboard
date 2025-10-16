@@ -1,0 +1,228 @@
+---
+globs: src/components/form/*.vue,src/components/FormInput.vue
+description: Form component development and usage guidelines
+---
+
+# Form Components Guidelines
+
+## 📝 Available Form Components
+
+The application includes 10 comprehensive form components in [src/components/form/](mdc:src/components/form/):
+
+### Basic Components
+- [FormInput.vue](mdc:src/components/FormInput.vue) - Universal input (text, email, number, textarea, select)
+- [SearchInput.vue](mdc:src/components/SearchInput.vue) - Search bar with icon
+- [FilterDropdown.vue](mdc:src/components/FilterDropdown.vue) - Filter dropdown
+
+### Advanced Components
+- [DatePicker.vue](mdc:src/components/form/DatePicker.vue) - Single date picker
+- [DateRangePicker.vue](mdc:src/components/form/DateRangePicker.vue) - Date range (start & end)
+- [SwitchToggle.vue](mdc:src/components/form/SwitchToggle.vue) - On/off toggle
+- [FileUploader.vue](mdc:src/components/form/FileUploader.vue) - File upload with drag & drop
+- [ImageUploader.vue](mdc:src/components/form/ImageUploader.vue) - Image upload with preview
+- [WysiwygEditor.vue](mdc:src/components/form/WysiwygEditor.vue) - Rich text editor (Quill.js)
+
+### Utility Components
+- [Pagination.vue](mdc:src/components/Pagination.vue) - Table pagination
+
+## 🎯 Usage Patterns
+
+### FormInput - Universal Input
+```vue
+<FormInput
+  v-model="form.name"
+  label="Nama Lengkap"
+  type="text"
+  placeholder="Masukkan nama"
+  required
+/>
+
+<FormInput
+  v-model="form.email"
+  label="Email"
+  type="email"
+  placeholder="email@example.com"
+  required
+/>
+
+<FormInput
+  v-model="form.description"
+  label="Deskripsi"
+  type="textarea"
+  :rows="4"
+  placeholder="Tulis deskripsi..."
+/>
+
+<FormInput
+  v-model="form.category"
+  label="Kategori"
+  type="select"
+  required
+>
+  <option value="">Pilih kategori</option>
+  <option value="cat1">Kategori 1</option>
+</FormInput>
+```
+
+### Date Components
+```vue
+<!-- Single Date -->
+<DatePicker
+  v-model="form.birthDate"
+  label="Tanggal Lahir"
+  required
+/>
+
+<!-- Date Range -->
+<DateRangePicker
+  v-model="form.period"
+  label="Periode Kursus"
+  required
+/>
+<!-- Access: form.period.start, form.period.end -->
+```
+
+### Switch Toggle
+```vue
+<SwitchToggle
+  v-model="form.isActive"
+  label="Enable Notifications"
+  description="Terima notifikasi email untuk update"
+/>
+```
+
+### File Upload
+```vue
+<!-- Single File -->
+<FileUploader
+  v-model="form.document"
+  label="Upload Dokumen"
+  accept=".pdf,.doc,.docx"
+  acceptText="PDF, DOC, DOCX hingga 10MB"
+/>
+
+<!-- Multiple Files -->
+<FileUploader
+  v-model="form.attachments"
+  label="Upload Attachments"
+  :multiple="true"
+  accept=".pdf,.doc,.docx,.xls,.xlsx"
+/>
+```
+
+### Image Upload
+```vue
+<!-- Single Image -->
+<ImageUploader
+  v-model="form.avatar"
+  label="Upload Avatar"
+/>
+
+<!-- Multiple Images -->
+<ImageUploader
+  v-model="form.gallery"
+  label="Upload Gallery"
+  :multiple="true"
+  :maxSize="5 * 1024 * 1024"
+  maxSizeText="5MB"
+/>
+```
+
+### WYSIWYG Editor
+```vue
+<WysiwygEditor
+  v-model="form.content"
+  label="Konten Kursus"
+  placeholder="Tulis konten lengkap..."
+  required
+/>
+```
+
+## 🎨 Styling Requirements
+
+All form components must:
+- Support dark mode with `dark:` classes
+- Use consistent focus states: `focus:ring-2 focus:ring-primary-500`
+- Use consistent border radius: `rounded-lg`
+- Use consistent padding: `px-4 py-2.5`
+- Include proper transitions: `transition-colors`
+
+## 🔧 Component Props
+
+### Common Props (All Form Components)
+- `label` - Field label
+- `modelValue` - v-model value
+- `required` - Show required indicator (*)
+- `placeholder` - Placeholder text
+- `disabled` - Disable the field
+
+### File Upload Specific
+- `accept` - File types (e.g., ".pdf,.doc")
+- `multiple` - Allow multiple files
+- `acceptText` - Help text for accepted formats
+- `maxSize` - Maximum file size in bytes
+- `maxSizeText` - Human readable size limit
+
+### Date Range Specific
+- `modelValue` - Object with `{ start: '', end: '' }`
+
+## 📤 Form Submission
+
+When submitting forms with files, use FormData:
+
+```javascript
+const handleSubmit = async () => {
+  const formData = new FormData()
+  
+  // Text fields
+  formData.append('title', form.value.title)
+  formData.append('content', form.value.wysiwygContent)
+  
+  // Dates
+  formData.append('date', form.value.singleDate)
+  formData.append('start_date', form.value.dateRange.start)
+  formData.append('end_date', form.value.dateRange.end)
+  
+  // Booleans
+  formData.append('is_active', form.value.isActive)
+  
+  // Single file
+  if (form.value.document) {
+    formData.append('document', form.value.document)
+  }
+  
+  // Multiple files
+  if (form.value.attachments && form.value.attachments.length > 0) {
+    form.value.attachments.forEach((file, index) => {
+      formData.append(`attachments[${index}]`, file)
+    })
+  }
+  
+  // Send to API
+  // await api.post('/endpoint', formData)
+}
+```
+
+## ✅ Validation
+
+Always validate form data before submission:
+
+```javascript
+const validateForm = () => {
+  const errors = {}
+  
+  if (!form.value.title) {
+    errors.title = 'Judul wajib diisi'
+  }
+  
+  if (!form.value.email || !isValidEmail(form.value.email)) {
+    errors.email = 'Email tidak valid'
+  }
+  
+  return Object.keys(errors).length === 0
+}
+```
+
+## 🎯 Demo Page
+
+See all form components in action at `/form-demo` or by clicking "Form Components" in the sidebar.

@@ -11,8 +11,8 @@
             @error="handleImageError"
           />
         </div>
-        <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Lupa Password</h1>
-        <p class="text-gray-600 dark:text-gray-400">Masukkan email Anda untuk reset password</p>
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Forgot Password</h1>
+        <p class="text-gray-600 dark:text-gray-400">Enter your email to reset password</p>
       </div>
 
       <!-- Success State -->
@@ -23,9 +23,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
-              <p class="font-medium text-secondary-800 dark:text-secondary-300">Email Terkirim!</p>
+              <p class="font-medium text-secondary-800 dark:text-secondary-300">Email Sent!</p>
               <p class="text-sm text-secondary-700 dark:text-secondary-400 mt-1">
-                Silakan cek email Anda untuk instruksi reset password.
+                Please check your email for password reset instructions.
               </p>
             </div>
           </div>
@@ -69,8 +69,8 @@
           class="w-full"
           :disabled="isLoading"
         >
-          <span v-if="isLoading">Mengirim...</span>
-          <span v-else>Kirim Link Reset Password</span>
+          <span v-if="isLoading">Sending...</span>
+          <span v-else>Send Reset Password Link</span>
         </BaseButton>
 
         <div class="text-center">
@@ -81,7 +81,7 @@
             <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Kembali ke Login
+            Back to Login
           </router-link>
         </div>
       </form>

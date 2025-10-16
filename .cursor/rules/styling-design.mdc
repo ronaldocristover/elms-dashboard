@@ -1,0 +1,364 @@
+---
+globs: *.css,*.vue,tailwind.config.js
+description: Styling guidelines and design system implementation
+---
+
+# Styling & Design System Guidelines
+
+## 🎨 Design System Overview
+
+The application uses a comprehensive design system with Tailwind CSS, centralized theme configuration, and consistent styling patterns.
+
+## 🎯 Design Principles
+
+### Core Principles:
+- **Generous white space** - Use adequate spacing for readability
+- **Neutral backgrounds** - #FFFFFF, #F9FAFB, #F3F4F6
+- **3-4 main colors** - Consistent color palette
+- **Subtle gradients** - Not flashy, professional
+- **Dark mode support** - All components support dark mode
+- **Soft shadows** - Modern, not harsh borders
+- **Rounded corners** - 8px-12px radius for friendliness
+
+## 🎨 Color System
+
+### Primary Colors (Blue)
+```css
+primary-50: #eff6ff
+primary-100: #dbeafe
+primary-500: #3b82f6  /* Main primary */
+primary-600: #2563eb
+primary-900: #1e3a8a
+```
+
+### Secondary Colors (Green)
+```css
+secondary-50: #ecfdf5
+secondary-100: #d1fae5
+secondary-500: #10b981  /* Main secondary */
+secondary-600: #059669
+secondary-900: #064e3b
+```
+
+### Accent Colors (Orange)
+```css
+accent-50: #fffbeb
+accent-100: #fef3c7
+accent-500: #f59e0b  /* Main accent */
+accent-600: #d97706
+accent-900: #92400e
+```
+
+### Neutral Colors
+```css
+gray-50: #f9fafb    /* Background */
+gray-100: #f3f4f6   /* Light background */
+gray-800: #1f2937   /* Text */
+gray-900: #111827   /* Dark text */
+```
+
+## 🌙 Dark Mode Implementation
+
+### Always Include Dark Mode Classes
+Every component must support dark mode:
+
+```vue
+<!-- Backgrounds -->
+<div class="bg-white dark:bg-gray-800">
+
+<!-- Text -->
+<p class="text-gray-800 dark:text-gray-100">
+
+<!-- Borders -->
+<div class="border-gray-200 dark:border-gray-700">
+
+<!-- Status badges -->
+<span class="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200">
+```
+
+### Dark Mode Patterns
+```vue
+<!-- Cards -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft border border-gray-200 dark:border-gray-700">
+
+<!-- Buttons -->
+<button class="bg-primary-500 hover:bg-primary-600 text-white dark:bg-primary-600 dark:hover:bg-primary-700">
+
+<!-- Inputs -->
+<input class="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
+```
+
+## 📏 Spacing System
+
+### Consistent Spacing
+```css
+/* Padding */
+p-4   /* 16px - Small components */
+p-6   /* 24px - Cards, main content */
+p-8   /* 32px - Large sections */
+
+/* Margins */
+mb-4  /* 16px - Small spacing */
+mb-6  /* 24px - Section spacing */
+mb-8  /* 32px - Large spacing */
+
+/* Gaps */
+gap-4 /* 16px - Small gaps */
+gap-6 /* 24px - Standard gaps */
+gap-8 /* 32px - Large gaps */
+```
+
+### Layout Spacing
+```vue
+<!-- Page layout -->
+<div class="p-6 space-y-6">
+  <!-- Section -->
+  <div class="mb-6">
+    <!-- Content -->
+  </div>
+  
+  <!-- Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Card items -->
+  </div>
+</div>
+```
+
+## 🎭 Shadow System
+
+### Soft Shadows (Not Hard Borders)
+```css
+shadow-soft     /* Subtle shadow */
+shadow-soft-md  /* Medium shadow */
+shadow-soft-lg  /* Large shadow */
+shadow-soft-xl  /* Extra large shadow */
+```
+
+### Shadow Usage
+```vue
+<!-- Cards -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft">
+
+<!-- Elevated elements -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft-md">
+
+<!-- Modals -->
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-soft-xl">
+```
+
+## 🔄 Border Radius
+
+### Consistent Radius
+```css
+rounded-lg  /* 12px - Default for cards, buttons */
+rounded-xl  /* 16px - Modals, large elements */
+rounded-2xl /* 24px - Special elements */
+```
+
+### Radius Usage
+```vue
+<!-- Buttons -->
+<button class="rounded-lg">
+
+<!-- Cards -->
+<div class="rounded-lg">
+
+<!-- Modals -->
+<div class="rounded-xl">
+
+<!-- Images -->
+<img class="rounded-lg">
+```
+
+## 🎨 Typography
+
+### Font System
+```css
+/* Font family */
+font-sans  /* Inter font family */
+
+/* Font weights */
+font-light   /* 300 */
+font-normal  /* 400 */
+font-medium  /* 500 */
+font-semibold /* 600 */
+font-bold    /* 700 */
+font-extrabold /* 800 */
+
+/* Font sizes */
+text-xs   /* 12px */
+text-sm   /* 14px */
+text-base /* 16px */
+text-lg   /* 18px */
+text-xl   /* 20px */
+text-2xl  /* 24px */
+text-3xl  /* 30px */
+```
+
+### Typography Usage
+```vue
+<!-- Headings -->
+<h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">
+<h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
+
+<!-- Body text -->
+<p class="text-gray-600 dark:text-gray-400">
+<p class="text-sm text-gray-500 dark:text-gray-400">
+
+<!-- Labels -->
+<label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+```
+
+## 🎯 Component Styling
+
+### Button Styling
+```vue
+<!-- Primary button -->
+<button class="bg-primary-500 hover:bg-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 text-white font-medium px-4 py-2.5 rounded-lg transition-colors">
+
+<!-- Outline button -->
+<button class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium px-4 py-2.5 rounded-lg transition-colors">
+
+<!-- Danger button -->
+<button class="bg-red-500 hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-white font-medium px-4 py-2.5 rounded-lg transition-colors">
+```
+
+### Form Input Styling
+```vue
+<input class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors">
+```
+
+### Card Styling
+```vue
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft border border-gray-200 dark:border-gray-700 p-6">
+```
+
+## 📱 Responsive Design
+
+### Breakpoints
+```css
+sm:  640px   /* Small devices */
+md:  768px   /* Medium devices */
+lg:  1024px  /* Large devices */
+xl:  1280px  /* Extra large devices */
+2xl: 1536px  /* 2X large devices */
+```
+
+### Responsive Patterns
+```vue
+<!-- Grid responsive -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+<!-- Flex responsive -->
+<div class="flex flex-col sm:flex-row gap-4">
+
+<!-- Text responsive -->
+<h1 class="text-2xl md:text-3xl lg:text-4xl font-bold">
+
+<!-- Padding responsive -->
+<div class="p-4 sm:p-6 lg:p-8">
+
+<!-- Spacing responsive -->
+<div class="space-y-4 sm:space-y-6">
+```
+
+## 🎨 Status Indicators
+
+### Success States
+```vue
+<span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-secondary-100 dark:bg-secondary-900/30 text-secondary-700 dark:text-secondary-400">
+  Aktif
+</span>
+```
+
+### Warning States
+```vue
+<span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-400">
+  Pending
+</span>
+```
+
+### Error States
+```vue
+<span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
+  Error
+</span>
+```
+
+### Info States
+```vue
+<span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
+  Info
+</span>
+```
+
+## 🎯 Focus States
+
+### Interactive Elements
+```vue
+<!-- Buttons -->
+<button class="focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+
+<!-- Inputs -->
+<input class="focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+
+<!-- Links -->
+<a class="focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded">
+```
+
+## 🔄 Transitions
+
+### Smooth Transitions
+```vue
+<!-- Color transitions -->
+<div class="transition-colors duration-200">
+
+<!-- Transform transitions -->
+<div class="transition-transform duration-300">
+
+<!-- All transitions -->
+<div class="transition-all duration-200">
+```
+
+## 🎨 Best Practices
+
+### Do:
+- Always include dark mode variants
+- Use consistent spacing (p-6, mb-6, gap-6)
+- Use soft shadows instead of borders
+- Apply rounded corners (rounded-lg)
+- Include focus states for accessibility
+- Use theme colors from config
+- Test both light and dark modes
+
+### Don't:
+- Hardcode colors (use theme colors)
+- Forget dark mode variants
+- Use harsh borders
+- Mix different spacing systems
+- Skip focus states
+- Use too many colors
+- Ignore responsive design
+
+## 🎨 Custom CSS
+
+### Global Styles
+Add custom styles in [src/style.css](mdc:src/style.css):
+
+```css
+/* Custom utilities */
+.shadow-soft {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.shadow-soft-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Dark mode custom styles */
+.dark .custom-element {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+```

@@ -1,109 +1,49 @@
 ---
 alwaysApply: true
-description: Core project structure and architecture guidelines for LMS Dashboard
+description: Project structure and architecture guide for LMS Dashboard
 ---
 
-# LMS Dashboard - Project Structure
+# LMS Dashboard - Project Structure Guide
 
-## Technology Stack
-- **Framework**: Vue 3 with Composition API
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS v3
-- **State Management**: Pinia
-- **Routing**: Vue Router with navigation guards
-- **Language**: JavaScript (ES6+)
+## 🏗️ Architecture Overview
 
-## Project Architecture
+This is a Vue 3 + Vite + Tailwind CSS + Pinia LMS Dashboard application with comprehensive form components and dark mode support.
 
-### Entry Point
-Main entry point is [src/main.js](mdc:src/main.js) which initializes:
-- Vue app
-- Pinia store
-- Vue Router
-- Auth check on startup
+## 📁 Key Directories
 
-### Folder Structure
+### Core Application
+- [src/main.js](mdc:src/main.js) - Application entry point
+- [src/App.vue](mdc:src/App.vue) - Root component
+- [src/router/index.js](mdc:src/router/index.js) - Vue Router configuration with auth guards
 
-```
-src/
-├── components/     # Reusable components (BaseButton, BaseTable, etc)
-├── layouts/        # Layout wrappers (MainLayout with Sidebar)
-├── views/          # Page components organized by module
-├── stores/         # Pinia stores for state management
-├── router/         # Route definitions and guards
-├── assets/         # Static assets
-└── style.css       # Global Tailwind CSS
-```
+### Layouts & Views
+- [src/layouts/MainLayout.vue](mdc:src/layouts/MainLayout.vue) - Main application layout
+- [src/views/](mdc:src/views/) - All page components
+  - [src/views/Login.vue](mdc:src/views/Login.vue) - Login page with logo
+  - [src/views/Dashboard.vue](mdc:src/views/Dashboard.vue) - Main dashboard
+  - [src/views/FormDemo.vue](mdc:src/views/FormDemo.vue) - Form components showcase
 
-### Store Organization
-All Pinia stores are in [src/stores/](mdc:src/stores) directory:
-- [auth.js](mdc:src/stores/auth.js) - Authentication state
-- [users.js](mdc:src/stores/users.js) - User management (Admin/Instructor/Student)
-- [courses.js](mdc:src/stores/courses.js) - Course management
-- [members.js](mdc:src/stores/members.js) - Member management
-- [materials.js](mdc:src/stores/materials.js) - Learning materials
-- [assessments.js](mdc:src/stores/assessments.js) - Quizzes & exams
-- [progress.js](mdc:src/stores/progress.js) - Progress tracking
-- [announcements.js](mdc:src/stores/announcements.js) - Announcements
-- [payments.js](mdc:src/stores/payments.js) - Payments & billing
+### Components
+- [src/components/](mdc:src/components/) - Reusable UI components
+- [src/components/form/](mdc:src/components/form/) - Form-specific components (10 components)
 
-### View Organization
-Views are organized by module in [src/views/](mdc:src/views):
-- Each module has: `Index.vue`, `Create.vue`, `Edit.vue`, `Detail.vue`
-- Special pages: `Login.vue`, `Dashboard.vue`, `Profile.vue`
+### State Management
+- [src/stores/](mdc:src/stores/) - Pinia stores for data management
+- [src/composables/useTheme.js](mdc:src/composables/useTheme.js) - Theme management composable
 
-### Component Organization
-Reusable components in [src/components/](mdc:src/components):
-- `BaseButton.vue` - Button with variants (primary, secondary, success, danger, warning, outline)
-- `BaseTable.vue` - Data table with slots for customization
-- `SearchInput.vue` - Search input with icon
-- `FilterDropdown.vue` - Filter dropdown component
-- `Breadcrumb.vue` - Breadcrumb navigation
-- `Sidebar.vue` - Responsive sidebar with mobile menu
+### Configuration
+- [src/config/theme.js](mdc:src/config/theme.js) - Centralized theme configuration
+- [tailwind.config.js](mdc:tailwind.config.js) - Tailwind CSS configuration
+- [vite.config.js](mdc:vite.config.js) - Vite build configuration
 
-### Layout System
-[MainLayout.vue](mdc:src/layouts/MainLayout.vue) wraps all authenticated pages with:
-- Responsive sidebar (collapsible on mobile)
-- Main content area with proper spacing
-- Mobile-first responsive design
+## 🎨 Theme System
 
-## Important Conventions
+The application uses a centralized theme system where all colors are defined in [src/config/theme.js](mdc:src/config/theme.js). This allows changing the entire application's color scheme by modifying a single file.
 
-### Naming Conventions
-- **Components**: PascalCase (e.g., `BaseButton.vue`, `UsersList.vue`)
-- **Stores**: camelCase files (e.g., `auth.js`, `users.js`)
-- **Routes**: kebab-case paths (e.g., `/users`, `/courses/create`)
-- **Variables**: camelCase (e.g., `userData`, `isLoading`)
+## 🌙 Dark Mode
 
-### File Organization
-- Group related files by feature/module
-- Keep components small and focused
-- Extract reusable logic into composables
-- Use stores for shared state
+Dark mode is implemented throughout the application using Tailwind's dark: prefix and is managed by the [src/composables/useTheme.js](mdc:src/composables/useTheme.js) composable.
 
-### Responsive Design
-- Mobile-first approach (min-width breakpoints)
-- Breakpoints: `sm:` (640px), `md:` (768px), `lg:` (1024px), `xl:` (1280px)
-- Always test on mobile, tablet, and desktop viewports
+## 📝 Form Components
 
-## Module Status
-
-### Fully Implemented (UI + Store):
-- User Management (Admin/Instructor/Student roles)
-- Course Management
-- Member Management
-- Profile Management
-- Dashboard with revenue tracking
-
-### Store Ready (Backend-ready, UI pending):
-- Content Management (Materials)
-- Assessment & Testing
-- Progress Tracking
-- Communication (Announcements)
-- Payment & Billing
-
-## Key Files to Reference
-- [README.md](mdc:README.md) - Complete documentation
-- [MODULES.md](mdc:MODULES.md) - Detailed module documentation
-- [IMPLEMENTATION_SUMMARY.md](mdc:IMPLEMENTATION_SUMMARY.md) - Implementation status
-- [package.json](mdc:package.json) - Dependencies and scripts
+The application includes 10 comprehensive form components in [src/components/form/](mdc:src/components/form/) that support dark mode, validation, and modern UX patterns.
