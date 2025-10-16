@@ -2,9 +2,9 @@
   <!-- Mobile Menu Button -->
   <button
     @click="toggleSidebar"
-    class="lg:hidden fixed top-4 left-4 z-50 p-2.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-lg shadow-soft-md hover:shadow-soft-lg transition-all duration-200"
+    class="lg:hidden fixed top-3 left-3 z-50 p-3 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-lg shadow-soft-md hover:shadow-soft-lg transition-all duration-200 touch-manipulation"
   >
-    <i class="fas fa-bars w-6 h-6"></i>
+    <i class="fas fa-bars w-5 h-5"></i>
   </button>
 
   <!-- Desktop Toggle Button -->
@@ -26,39 +26,39 @@
   <!-- Sidebar -->
   <div :class="sidebarClasses">
     <!-- Logo -->
-    <div class="p-6 border-b border-gray-200 dark:border-gray-800">
+    <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-800">
       <div class="flex items-center" :class="isCollapsed ? 'justify-center' : 'space-x-3'">
         <img 
           src="/sample-logo.jpg" 
           alt="LMS Logo" 
-          class="w-10 h-10 rounded-lg shadow-soft object-cover flex-shrink-0"
+          class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg shadow-soft object-cover flex-shrink-0"
           @error="handleImageError"
         />
         <div v-if="!isCollapsed" class="min-w-0">
-          <h1 class="text-lg font-bold text-gray-800 dark:text-gray-100 truncate">LMS Dashboard</h1>
+          <h1 class="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-100 truncate">LMS Dashboard</h1>
           <p class="text-xs text-gray-500 dark:text-gray-400 truncate">Learning System</p>
         </div>
       </div>
     </div>
 
     <!-- Navigation Menu -->
-    <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+    <nav class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-1">
       <router-link
         v-for="item in menuItems"
         :key="item.to"
         :to="item.to"
         @click="closeSidebarOnMobile"
-        class="flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors group relative"
+        class="flex items-center px-3 sm:px-4 py-2.5 sm:py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors group relative touch-manipulation"
         active-class="bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 font-medium"
         :title="isCollapsed ? item.label : ''"
       >
-        <i :class="`fas fa-${item.icon} w-5 h-5 flex-shrink-0 ${isCollapsed ? '' : 'mr-3'}`"></i>
-        <span v-if="!isCollapsed" class="truncate">{{ item.label }}</span>
+        <i :class="`fas fa-${item.icon} w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 ${isCollapsed ? '' : 'mr-2 sm:mr-3'}`"></i>
+        <span v-if="!isCollapsed" class="truncate text-sm sm:text-base">{{ item.label }}</span>
         
         <!-- Tooltip for collapsed state -->
         <div 
           v-if="isCollapsed" 
-          class="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
+          class="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs sm:text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
         >
           {{ item.label }}
         </div>
@@ -66,21 +66,21 @@
     </nav>
 
     <!-- User Info & Actions -->
-    <div class="p-4 border-t border-gray-200 dark:border-gray-800 space-y-3">
+    <div v-if="!isCollapsed || isMobile" class="p-3 sm:p-4 border-t border-gray-200 dark:border-gray-800 space-y-3">
       <!-- Theme Switcher -->
-      <div class="flex items-center justify-between px-3 py-2">
-        <span class="text-sm text-gray-600 dark:text-gray-400">Dark Mode</span>
+      <div class="flex items-center justify-between px-2 sm:px-3 py-2">
+        <span class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Dark Mode</span>
         <button
           @click="toggleDarkMode"
           :class="[
-            'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+            'relative inline-flex h-5 w-9 sm:h-6 sm:w-11 items-center rounded-full transition-colors touch-manipulation',
             isDarkMode ? 'bg-primary-600' : 'bg-gray-300'
           ]"
         >
           <span
             :class="[
-              'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
-              isDarkMode ? 'translate-x-6' : 'translate-x-1'
+              'inline-block h-3 w-3 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform',
+              isDarkMode ? 'translate-x-5 sm:translate-x-6' : 'translate-x-1'
             ]"
           />
         </button>
@@ -90,13 +90,13 @@
       <router-link
         to="/profile"
         @click="closeSidebarOnMobile"
-        class="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors group"
+        class="flex items-center p-2 sm:p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors group touch-manipulation"
       >
-        <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center flex-shrink-0">
-          <span class="text-sm font-bold text-white">{{ userInitial }}</span>
+        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center flex-shrink-0">
+          <span class="text-xs sm:text-sm font-bold text-white">{{ userInitial }}</span>
         </div>
-        <div class="ml-3 flex-1 min-w-0">
-          <p class="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">{{ authStore.user?.name }}</p>
+        <div class="ml-2 sm:ml-3 flex-1 min-w-0">
+          <p class="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">{{ authStore.user?.name }}</p>
           <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ authStore.user?.email }}</p>
         </div>
       </router-link>
@@ -104,11 +104,12 @@
       <!-- Logout Button -->
       <button
         @click="showLogoutModal = true"
-        class="w-full flex items-center justify-center px-4 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-medium"
+        class="w-full flex items-center justify-center px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-medium touch-manipulation"
       >
-        <i class="fas fa-sign-out-alt w-5 h-5 mr-2"></i>
-        <span class="text-sm">Logout</span>
+        <i class="fas fa-sign-out-alt w-4 h-4 sm:w-5 sm:h-5 mr-2"></i>
+        <span class="text-xs sm:text-sm">Logout</span>
       </button>
+    </div>
 
     <!-- Logout Confirmation Modal -->
     <ConfirmModal
@@ -120,7 +121,6 @@
       type="warning"
       @confirm="handleLogout"
     />
-    </div>
   </div>
 </template>
 

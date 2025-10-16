@@ -265,13 +265,18 @@ The application is **fully responsive** for various screen sizes:
 
 ## 📚 Documentation
 
-All comprehensive documentation has been moved to the `doc/` folder for better organization:
+Complete documentation is available in a single comprehensive file:
 
-- **[📖 Documentation Index](doc/README.md)** - Complete documentation overview and navigation
-- **[🎨 Design & Theme](doc/)** - Design system, theme configuration, and styling guides
-- **[🧩 Components & Features](doc/)** - Form components, dashboard features, and feature lists
-- **[🏗️ Architecture & Modules](doc/)** - System architecture and module documentation
-- **[🚀 Quick References](doc/)** - Code snippets and development guides
+- **[📖 Complete Documentation](COMPLETE_DOCUMENTATION.md)** - All-in-one comprehensive guide covering:
+  - Project overview and setup
+  - Design system and theme configuration
+  - Component library and usage examples
+  - Feature documentation and implementation
+  - Mobile responsiveness guide
+  - State management and routing
+  - Form components and dashboard features
+  - Development guidelines and best practices
+  - API integration and deployment
 
 ## 🔧 Further Development
 

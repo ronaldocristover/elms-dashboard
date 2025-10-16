@@ -1,12 +1,12 @@
 <template>
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft p-6">
-    <div class="flex items-center justify-between mb-6">
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ title }}</h3>
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft p-4 sm:p-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-0">
+      <h3 class="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100">{{ title }}</h3>
       <div class="flex items-center space-x-2">
         <select 
           v-model="selectedPeriod" 
           @change="$emit('period-change', selectedPeriod)"
-          class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100"
+          class="text-xs sm:text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-2 sm:px-3 py-1.5 sm:py-1 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 w-full sm:w-auto"
         >
           <option value="7d">Last 7 days</option>
           <option value="30d">Last 30 days</option>
@@ -16,18 +16,18 @@
     </div>
     
     <!-- Chart Container -->
-    <div class="relative h-64">
+    <div class="relative h-48 sm:h-64">
       <canvas ref="chartCanvas" class="w-full h-full"></canvas>
     </div>
     
     <!-- Chart Legend -->
-    <div v-if="showLegend" class="flex items-center justify-center space-x-6 mt-4">
+    <div v-if="showLegend" class="flex items-center justify-center space-x-4 sm:space-x-6 mt-4 flex-wrap">
       <div v-for="(item, index) in legendData" :key="index" class="flex items-center space-x-2">
         <div 
-          class="w-3 h-3 rounded-full" 
+          class="w-2 h-2 sm:w-3 sm:h-3 rounded-full" 
           :style="{ backgroundColor: item.color }"
         ></div>
-        <span class="text-sm text-gray-600 dark:text-gray-400">{{ item.label }}</span>
+        <span class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{{ item.label }}</span>
       </div>
     </div>
   </div>

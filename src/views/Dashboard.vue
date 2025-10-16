@@ -3,17 +3,17 @@
     <Breadcrumb :items="breadcrumbs" />
     
     <!-- Welcome Card -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft p-8 mb-8">
-      <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
+      <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
         Welcome, {{ authStore.user?.name }}!
       </h2>
-      <p class="text-gray-600 dark:text-gray-400">
+      <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
         Manage your courses, students, and learning materials with ease.
       </p>
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
       <!-- Total Courses -->
       <StatCard
         title="Total Courses"
@@ -56,7 +56,7 @@
     </div>
 
     <!-- Revenue & Active Courses Row -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
       <!-- Revenue -->
       <StatCard
         title="Total Revenue"
@@ -80,7 +80,7 @@
     </div>
 
     <!-- Member Registration Chart -->
-    <div class="mb-8">
+    <div class="mb-6 sm:mb-8">
       <Chart
         title="Member Registration Trend"
         :data="memberRegistrationData"
@@ -90,33 +90,34 @@
     </div>
 
     <!-- Recent Courses -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft mb-8">
-      <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Recent Courses</h3>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft mb-6 sm:mb-8">
+      <div class="px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100">Recent Courses</h3>
         <BaseButton
           size="sm"
           variant="outline"
           @click="$router.push('/courses')"
+          class="w-full sm:w-auto"
         >
           View All
         </BaseButton>
       </div>
-      <div class="p-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="p-4 sm:p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div
             v-for="course in recentCourses"
             :key="course.id"
-            class="border border-gray-200 dark:border-gray-700 rounded-lg p-5 hover:shadow-soft-md transition-all cursor-pointer group"
+            class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 sm:p-5 hover:shadow-soft-md transition-all cursor-pointer group touch-manipulation"
             @click="$router.push(`/courses/${course.id}`)"
           >
-            <h4 class="font-semibold text-gray-800 dark:text-gray-100 mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+            <h4 class="font-semibold text-sm sm:text-base text-gray-800 dark:text-gray-100 mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
               {{ course.title }}
             </h4>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">{{ course.description }}</p>
-            <div class="flex items-center justify-between text-sm">
+            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 line-clamp-2">{{ course.description }}</p>
+            <div class="flex items-center justify-between text-xs sm:text-sm">
               <span class="text-gray-500 dark:text-gray-400">{{ course.students }} Students</span>
               <span
-                class="px-2.5 py-1 text-xs font-medium rounded-lg"
+                class="px-2 sm:px-2.5 py-1 text-xs font-medium rounded-lg"
                 :class="course.status === 'active' ? 'bg-secondary-100 dark:bg-secondary-900/30 text-secondary-700 dark:text-secondary-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'"
               >
                 {{ course.status === 'active' ? 'Active' : 'Inactive' }}
@@ -129,42 +130,43 @@
 
     <!-- Recent Members -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft">
-      <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Recent Members</h3>
+      <div class="px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100">Recent Members</h3>
         <BaseButton
           size="sm"
           variant="outline"
           @click="$router.push('/members')"
+          class="w-full sm:w-auto"
         >
           View All
         </BaseButton>
       </div>
-      <div class="p-6">
-        <div class="space-y-4">
+      <div class="p-4 sm:p-6">
+        <div class="space-y-3 sm:space-y-4">
           <div
             v-for="member in recentMembers"
             :key="member.id"
-            class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-soft-md transition-all cursor-pointer group"
+            class="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-soft-md transition-all cursor-pointer group touch-manipulation gap-3 sm:gap-0"
             @click="$router.push(`/members/${member.id}`)"
           >
-            <div class="flex items-center space-x-4">
-              <img :src="member.avatar" alt="Avatar" class="w-12 h-12 rounded-lg" />
-              <div>
-                <p class="font-semibold text-gray-800 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+            <div class="flex items-center space-x-3 sm:space-x-4">
+              <img :src="member.avatar" alt="Avatar" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex-shrink-0" />
+              <div class="min-w-0 flex-1">
+                <p class="font-semibold text-sm sm:text-base text-gray-800 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors truncate">
                   {{ member.name }}
                 </p>
-                <p class="text-sm text-gray-500 dark:text-gray-400">{{ member.email }}</p>
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">{{ member.email }}</p>
               </div>
             </div>
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2 flex-wrap">
               <span
-                class="px-2.5 py-1 text-xs font-medium rounded-lg"
+                class="px-2 sm:px-2.5 py-1 text-xs font-medium rounded-lg"
                 :class="member.role === 'instructor' ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400' : 'bg-secondary-100 dark:bg-secondary-900/30 text-secondary-700 dark:text-secondary-400'"
               >
                 {{ member.role === 'instructor' ? 'Instructor' : 'Student' }}
               </span>
               <span
-                class="px-2.5 py-1 text-xs font-medium rounded-lg"
+                class="px-2 sm:px-2.5 py-1 text-xs font-medium rounded-lg"
                 :class="member.status === 'active' ? 'bg-secondary-100 dark:bg-secondary-900/30 text-secondary-700 dark:text-secondary-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'"
               >
                 {{ member.status === 'active' ? 'Active' : 'Inactive' }}

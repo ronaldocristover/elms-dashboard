@@ -5,7 +5,7 @@
     
     <!-- Main Content -->
     <div class="flex-1 overflow-auto transition-all duration-300" :class="mainContentClasses">
-      <div class="p-4 md:p-6 lg:p-8 pt-16 lg:pt-8">
+      <div class="p-3 sm:p-4 md:p-6 lg:p-8 pt-16 sm:pt-16 lg:pt-8">
         <slot />
       </div>
     </div>

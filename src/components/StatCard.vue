@@ -1,15 +1,15 @@
 <template>
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft p-6 hover:shadow-soft-md transition-all duration-200">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-soft p-4 sm:p-6 hover:shadow-soft-md transition-all duration-200">
     <div class="flex items-center justify-between">
-      <div class="flex-1">
-        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{{ title }}</p>
-        <p class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">{{ formattedValue }}</p>
+      <div class="flex-1 min-w-0">
+        <p class="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 mb-1 truncate">{{ title }}</p>
+        <p class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">{{ formattedValue }}</p>
         
         <!-- Change indicator -->
-        <div v-if="showChange" class="flex items-center space-x-1">
+        <div v-if="showChange" class="flex items-center space-x-1 flex-wrap">
           <i 
             :class="[
-              'w-4 h-4',
+              'w-3 h-3 sm:w-4 sm:h-4',
               changeType === 'increase' ? 'fas fa-arrow-up text-green-500' : 
               changeType === 'decrease' ? 'fas fa-arrow-down text-red-500' : 
               'fas fa-minus text-gray-500'
@@ -17,7 +17,7 @@
           ></i>
           <span 
             :class="[
-              'text-sm font-medium',
+              'text-xs sm:text-sm font-medium',
               changeType === 'increase' ? 'text-green-600 dark:text-green-400' : 
               changeType === 'decrease' ? 'text-red-600 dark:text-red-400' : 
               'text-gray-600 dark:text-gray-400'
@@ -25,13 +25,13 @@
           >
             {{ Math.abs(changePercentage) }}%
           </span>
-          <span class="text-xs text-gray-500 dark:text-gray-400">{{ changeLabel }}</span>
+          <span class="text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">{{ changeLabel }}</span>
         </div>
       </div>
       
       <!-- Icon -->
       <div :class="[
-        'w-12 h-12 rounded-lg flex items-center justify-center',
+        'w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center flex-shrink-0',
         iconBgClass
       ]">
         <i :class="[iconClass, iconColorClass]"></i>
@@ -96,7 +96,7 @@ const changeType = computed(() => {
   return 'neutral'
 })
 
-const iconClass = computed(() => `fas fa-${props.icon} w-6 h-6`)
+const iconClass = computed(() => `fas fa-${props.icon} w-5 h-5 sm:w-6 sm:h-6`)
 
 const iconBgClass = computed(() => {
   const colorMap = {
