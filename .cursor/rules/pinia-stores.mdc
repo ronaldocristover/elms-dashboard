@@ -1,0 +1,341 @@
+---
+globs: src/stores/*.js
+description: Pinia store development patterns and conventions
+---
+
+# Pinia Store Guidelines
+
+## Store Structure
+
+Use Composition API style with `defineStore` and setup function. See [src/stores/users.js](mdc:src/stores/users.js) as reference.
+
+```javascript
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+
+export const useModuleStore = defineStore('module', () => {
+  // State (ref)
+  const items = ref([
+    // sample data
+  ])
+  
+  // Getters (computed)
+  const activeItems = computed(() => {
+    return items.value.filter(item => item.status === 'active')
+  })
+  
+  // Actions (functions)
+  const getItemById = (id) => {
+    return items.value.find(item => item.id === parseInt(id))
+  }
+  
+  const addItem = (item) => {
+    const newItem = {
+      ...item,
+      id: items.value.length + 1,
+      createdAt: new Date().toISOString().split('T')[0]
+    }
+    items.value.push(newItem)
+    return newItem
+  }
+  
+  const updateItem = (id, updatedItem) => {
+    const index = items.value.findIndex(item => item.id === parseInt(id))
+    if (index !== -1) {
+      items.value[index] = { ...items.value[index], ...updatedItem }
+      return items.value[index]
+    }
+    return null
+  }
+  
+  const deleteItem = (id) => {
+    const index = items.value.findIndex(item => item.id === parseInt(id))
+    if (index !== -1) {
+      items.value.splice(index, 1)
+      return true
+    }
+    return false
+  }
+  
+  // Return everything that should be exposed
+  return {
+    items,
+    activeItems,
+    getItemById,
+    addItem,
+    updateItem,
+    deleteItem
+  }
+})
+```
+
+## Naming Conventions
+
+### Store Names
+- File: `moduleName.js` (camelCase)
+- Store ID: `'moduleName'` (camelCase)
+- Composable: `useModuleNameStore()` (PascalCase with 'use' prefix)
+
+Examples:
+- `users.js` → `useUsersStore()`
+- `courses.js` → `useCoursesStore()`
+- `assessments.js` → `useAssessmentsStore()`
+
+### State Variables
+- Use descriptive plural names for collections: `users`, `courses`, `payments`
+- Use singular for single items: `currentUser`, `selectedCourse`
+- Use `is/has` prefix for booleans: `isLoading`, `hasError`
+
+### Action Names
+- CRUD operations: `add`, `update`, `delete`, `get` prefix
+- Use descriptive verbs: `fetchItems`, `saveItem`, `removeItem`
+- Queries: `getItemById`, `getItemsByStatus`, `filterItems`
+
+## Standard CRUD Pattern
+
+Every store managing entities should include:
+
+```javascript
+// State
+const items = ref([])
+
+// Getters
+const getItemById = (id) => {
+  return items.value.find(item => item.id === parseInt(id))
+}
+
+// Create
+const addItem = (itemData) => {
+  const newItem = {
+    ...itemData,
+    id: generateId(),
+    createdAt: getCurrentDate()
+  }
+  items.value.push(newItem)
+  return newItem
+}
+
+// Update
+const updateItem = (id, updatedData) => {
+  const index = items.value.findIndex(item => item.id === parseInt(id))
+  if (index !== -1) {
+    items.value[index] = { ...items.value[index], ...updatedData }
+    return items.value[index]
+  }
+  return null
+}
+
+// Delete
+const deleteItem = (id) => {
+  const index = items.value.findIndex(item => item.id === parseInt(id))
+  if (index !== -1) {
+    items.value.splice(index, 1)
+    return true
+  }
+  return false
+}
+```
+
+## Sample Data
+
+Always provide sample data for development and testing:
+
+```javascript
+const items = ref([
+  {
+    id: 1,
+    name: 'Sample Item 1',
+    status: 'active',
+    createdAt: '2024-01-01'
+  },
+  {
+    id: 2,
+    name: 'Sample Item 2',
+    status: 'inactive',
+    createdAt: '2024-01-02'
+  }
+])
+```
+
+## Auth Store Pattern
+
+See [src/stores/auth.js](mdc:src/stores/auth.js) for authentication store:
+
+```javascript
+export const useAuthStore = defineStore('auth', () => {
+  const user = ref(null)
+  const isAuthenticated = ref(false)
+
+  const login = (username, password) => {
+    // Login logic
+    user.value = { username, name: 'User' }
+    isAuthenticated.value = true
+    localStorage.setItem('user', JSON.stringify(user.value))
+    return true
+  }
+
+  const logout = () => {
+    user.value = null
+    isAuthenticated.value = false
+    localStorage.removeItem('user')
+  }
+
+  const checkAuth = () => {
+    const savedUser = localStorage.getItem('user')
+    if (savedUser) {
+      user.value = JSON.parse(savedUser)
+      isAuthenticated.value = true
+    }
+  }
+
+  return { user, isAuthenticated, login, logout, checkAuth }
+})
+```
+
+## Role-Based Store Pattern
+
+For stores with role management (like [src/stores/users.js](mdc:src/stores/users.js)):
+
+```javascript
+const getUsersByRole = (role) => {
+  return users.value.filter(user => user.role === role)
+}
+
+const getRoleColor = (role) => {
+  const colors = {
+    admin: '3b82f6',
+    instructor: '8b5cf6',
+    student: '10b981'
+  }
+  return colors[role] || '6b7280'
+}
+
+// Usage in components:
+const admins = usersStore.getUsersByRole('admin')
+```
+
+## Computed Properties in Stores
+
+Use computed for derived state:
+
+```javascript
+const activeItems = computed(() => {
+  return items.value.filter(item => item.status === 'active')
+})
+
+const totalRevenue = computed(() => {
+  return items.value.reduce((sum, item) => sum + item.price, 0)
+})
+
+const itemsCount = computed(() => items.value.length)
+```
+
+## Relationship Between Stores
+
+For related data across stores:
+
+```javascript
+// In materials store
+const getMaterialsByCourse = (courseId) => {
+  return materials.value.filter(m => m.courseId === parseInt(courseId))
+}
+
+// In progress store
+const getProgressByUser = (userId) => {
+  return progress.value.filter(p => p.userId === parseInt(userId))
+}
+```
+
+## Data Consistency
+
+When adding items, ensure consistent structure:
+
+```javascript
+const addItem = (itemData) => {
+  const newItem = {
+    ...itemData,
+    id: items.value.length + 1,
+    createdAt: new Date().toISOString().split('T')[0],
+    // Add default values based on role/type
+    ...(itemData.role === 'student' && {
+      coursesEnrolled: 0,
+      coursesCompleted: 0
+    })
+  }
+  items.value.push(newItem)
+  return newItem
+}
+```
+
+## Error Handling (Future)
+
+Prepare stores for API integration:
+
+```javascript
+const fetchItems = async () => {
+  try {
+    // const response = await api.get('/items')
+    // items.value = response.data
+    
+    // For now, use sample data
+    return items.value
+  } catch (error) {
+    console.error('Error fetching items:', error)
+    throw error
+  }
+}
+```
+
+## Store Usage in Components
+
+```javascript
+// In component
+import { useUsersStore } from '@/stores/users'
+
+const usersStore = useUsersStore()
+
+// Access state
+const users = usersStore.users
+
+// Call actions
+usersStore.addUser(userData)
+usersStore.updateUser(id, data)
+usersStore.deleteUser(id)
+
+// Use getters
+const user = usersStore.getUserById(1)
+```
+
+## Existing Stores
+
+### Fully Implemented with UI:
+- [auth.js](mdc:src/stores/auth.js) - Authentication
+- [users.js](mdc:src/stores/users.js) - User management
+- [courses.js](mdc:src/stores/courses.js) - Course management
+- [members.js](mdc:src/stores/members.js) - Member management
+
+### Backend-Ready (Store only):
+- [materials.js](mdc:src/stores/materials.js) - Learning materials
+- [assessments.js](mdc:src/stores/assessments.js) - Quizzes & exams
+- [progress.js](mdc:src/stores/progress.js) - Progress tracking
+- [announcements.js](mdc:src/stores/announcements.js) - Announcements
+- [payments.js](mdc:src/stores/payments.js) - Payments & billing
+
+## Best Practices
+
+### ✅ Do:
+- Use Composition API style
+- Provide sample data
+- Include CRUD operations
+- Use computed for derived state
+- Return all exposed properties
+- Use consistent naming
+- Add helper functions (getById, filter, etc)
+
+### ❌ Don't:
+- Use Options API style
+- Leave stores empty
+- Forget to return properties
+- Mutate state outside store
+- Use synchronous code for future API calls
+- Mix concerns (keep stores focused)

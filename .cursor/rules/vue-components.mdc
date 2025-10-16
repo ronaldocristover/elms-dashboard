@@ -1,0 +1,268 @@
+---
+globs: *.vue
+description: Vue component development guidelines and best practices
+---
+
+# Vue Component Guidelines
+
+## Composition API Standards
+
+Always use Vue 3 Composition API with `<script setup>`:
+
+```vue
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const data = ref([])
+const isLoading = ref(false)
+
+const filteredData = computed(() => {
+  // computed logic
+})
+
+onMounted(() => {
+  // initialization
+})
+</script>
+```
+
+## Component Structure Order
+
+1. **Template** - Always first
+2. **Script Setup** - Second
+3. **Style** (if needed) - Last, use Tailwind classes instead when possible
+
+```vue
+<template>
+  <!-- Template content -->
+</template>
+
+<script setup>
+// Imports
+// Props/Emits
+// State (ref, reactive)
+// Computed
+// Methods
+// Lifecycle hooks
+</script>
+
+<style scoped>
+/* Minimal custom styles, prefer Tailwind */
+</style>
+```
+
+## Props and Emits
+
+### Props Definition
+```vue
+<script setup>
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: ''
+  },
+  size: {
+    type: String,
+    default: 'md',
+    validator: (value) => ['sm', 'md', 'lg'].includes(value)
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
+})
+</script>
+```
+
+### Emits Definition
+```vue
+<script setup>
+const emit = defineEmits(['update:modelValue', 'click'])
+
+const handleClick = () => {
+  emit('click', event)
+}
+</script>
+```
+
+## Reusable Components Pattern
+
+See [BaseButton.vue](mdc:src/components/BaseButton.vue) and [BaseTable.vue](mdc:src/components/BaseTable.vue) as examples.
+
+### Key Principles:
+1. **Props for Configuration** - Use props for variants, sizes, states
+2. **Slots for Content** - Use slots for flexible content insertion
+3. **Emits for Events** - Emit events instead of direct DOM manipulation
+4. **Computed for Dynamic Classes** - Use computed for conditional styling
+
+## Page Components (Views)
+
+Page components should:
+1. **Use MainLayout** wrapper
+2. **Include Breadcrumb** at the top
+3. **Be responsive** - mobile, tablet, desktop
+4. **Use stores** for data management
+5. **Handle loading states**
+
+Example pattern from [src/views/users/Index.vue](mdc:src/views/users/Index.vue):
+
+```vue
+<template>
+  <MainLayout>
+    <Breadcrumb :items="breadcrumbs" />
+    
+    <div class="mb-4 md:mb-6">
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Title</h1>
+      <p class="text-sm md:text-base text-gray-600 mt-1">Description</p>
+    </div>
+
+    <!-- Filter and Search -->
+    <div class="bg-white p-3 md:p-4 rounded-lg shadow mb-4 md:mb-6">
+      <SearchInput v-model="searchQuery" />
+      <FilterDropdown v-model="filter" :options="options" />
+    </div>
+
+    <!-- Table for Desktop -->
+    <div class="hidden md:block">
+      <BaseTable :columns="columns" :data="data">
+        <!-- Custom slots -->
+      </BaseTable>
+    </div>
+
+    <!-- Cards for Mobile -->
+    <div class="block md:hidden">
+      <!-- Mobile card view -->
+    </div>
+  </MainLayout>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import MainLayout from '@/layouts/MainLayout.vue'
+import Breadcrumb from '@/components/Breadcrumb.vue'
+// ... other imports
+</script>
+```
+
+## Responsive Design in Components
+
+### Tailwind Responsive Classes
+```vue
+<!-- Mobile-first approach -->
+<div class="p-4 md:p-6 lg:p-8">
+  <h1 class="text-xl md:text-2xl lg:text-3xl">Responsive Heading</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- Grid content -->
+  </div>
+</div>
+```
+
+### Show/Hide on Different Screens
+```vue
+<!-- Show only on mobile -->
+<div class="block md:hidden">Mobile content</div>
+
+<!-- Show only on desktop -->
+<div class="hidden md:block">Desktop content</div>
+
+<!-- Different layouts -->
+<div class="flex flex-col md:flex-row gap-3 md:gap-4">
+  <!-- Responsive flex direction -->
+</div>
+```
+
+## Store Usage in Components
+
+```vue
+<script setup>
+import { useUsersStore } from '@/stores/users'
+import { useAuthStore } from '@/stores/auth'
+
+const usersStore = useUsersStore()
+const authStore = useAuthStore()
+
+// Access store state
+const users = computed(() => usersStore.users)
+
+// Call store actions
+const handleDelete = (id) => {
+  usersStore.deleteUser(id)
+}
+</script>
+```
+
+## Router Usage
+
+```vue
+<script setup>
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
+
+// Navigate programmatically
+const goToDetail = (id) => {
+  router.push(`/users/${id}`)
+}
+
+// Access route params
+const userId = route.params.id
+</script>
+```
+
+## Form Handling
+
+```vue
+<template>
+  <form @submit.prevent="handleSubmit">
+    <input
+      v-model="form.name"
+      type="text"
+      required
+      class="w-full px-3 md:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+    />
+    
+    <BaseButton type="submit">Save</BaseButton>
+  </form>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+const form = ref({
+  name: '',
+  email: '',
+  // ... other fields
+})
+
+const handleSubmit = () => {
+  // Handle form submission
+  console.log(form.value)
+}
+</script>
+```
+
+## Do's and Don'ts
+
+### ✅ Do:
+- Use Composition API with `<script setup>`
+- Use Tailwind CSS classes for styling
+- Make components responsive (mobile-first)
+- Use computed for derived state
+- Emit events from child components
+- Use slots for flexible content
+- Handle loading and error states
+- Use stores for shared state
+
+### ❌ Don't:
+- Use Options API (use Composition API)
+- Write custom CSS (use Tailwind)
+- Forget mobile responsiveness
+- Mutate props directly
+- Use jQuery or DOM manipulation
+- Create large monolithic components
+- Ignore loading states
+- Hardcode data in components

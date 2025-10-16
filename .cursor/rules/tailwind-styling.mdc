@@ -1,0 +1,363 @@
+---
+globs: *.vue,*.jsx,*.tsx
+description: Tailwind CSS usage guidelines and responsive design patterns
+---
+
+# Tailwind CSS Guidelines
+
+## Philosophy
+
+**Utility-First:** Use Tailwind utility classes instead of custom CSS. Reference [src/style.css](mdc:src/style.css) which only imports Tailwind directives.
+
+## Responsive Design Pattern
+
+### Mobile-First Approach
+Always start with mobile styles, then add larger breakpoints:
+
+```vue
+<!-- Mobile (default) → Tablet → Desktop -->
+<div class="p-4 md:p-6 lg:p-8">
+  <h1 class="text-xl md:text-2xl lg:text-3xl">Responsive Text</h1>
+</div>
+```
+
+### Breakpoints
+- `sm:` - 640px (small tablet)
+- `md:` - 768px (tablet)
+- `lg:` - 1024px (desktop)
+- `xl:` - 1280px (large desktop)
+- `2xl:` - 1536px (extra large)
+
+### Common Responsive Patterns
+
+#### Grid Layouts
+```vue
+<!-- 1 column mobile, 2 tablet, 4 desktop -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+  <!-- Grid items -->
+</div>
+```
+
+#### Flex Direction
+```vue
+<!-- Stack on mobile, row on desktop -->
+<div class="flex flex-col md:flex-row gap-3 md:gap-4">
+  <!-- Flex items -->
+</div>
+```
+
+#### Show/Hide Elements
+```vue
+<!-- Mobile only -->
+<div class="block md:hidden">Mobile menu</div>
+
+<!-- Desktop only -->
+<div class="hidden md:block">Desktop table</div>
+
+<!-- Different component layouts -->
+<div class="block md:hidden">
+  <!-- Mobile card view -->
+</div>
+<div class="hidden md:block">
+  <!-- Desktop table view -->
+</div>
+```
+
+#### Spacing
+```vue
+<!-- Responsive padding -->
+<div class="p-3 md:p-4 lg:p-6">
+
+<!-- Responsive margin -->
+<div class="mb-4 md:mb-6 lg:mb-8">
+
+<!-- Responsive gap -->
+<div class="gap-3 md:gap-4 lg:gap-6">
+```
+
+## Color System
+
+### Primary Colors (from project)
+```vue
+<!-- Primary (Blue) -->
+bg-blue-500, bg-blue-600, bg-blue-700
+text-blue-600, text-blue-800
+border-blue-500
+
+<!-- Success (Green) -->
+bg-green-500, bg-green-600, bg-green-700
+text-green-600, text-green-800
+bg-green-100 (light background)
+
+<!-- Warning (Yellow) -->
+bg-yellow-500, bg-yellow-600
+text-yellow-600
+
+<!-- Danger (Red) -->
+bg-red-600, bg-red-700
+text-red-600, text-red-800
+
+<!-- Secondary (Gray) -->
+bg-gray-600, bg-gray-700, bg-gray-800
+text-gray-500, text-gray-600, text-gray-700
+
+<!-- Purple (for instructor role) -->
+bg-purple-500, bg-purple-600
+text-purple-800
+```
+
+### Status Badges
+```vue
+<!-- Active/Success -->
+<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
+  Aktif
+</span>
+
+<!-- Inactive/Danger -->
+<span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">
+  Nonaktif
+</span>
+
+<!-- Role badges -->
+<span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+  Admin
+</span>
+<span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">
+  Instruktur
+</span>
+<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
+  Siswa
+</span>
+```
+
+## Common Components Patterns
+
+### Cards
+```vue
+<div class="bg-white rounded-lg shadow p-4 md:p-6">
+  <!-- Card content -->
+</div>
+
+<!-- With hover effect -->
+<div class="bg-white rounded-lg shadow p-4 hover:shadow-lg transition duration-200">
+  <!-- Card content -->
+</div>
+```
+
+### Buttons
+See [BaseButton.vue](mdc:src/components/BaseButton.vue) for implementation:
+
+```vue
+<!-- Primary -->
+<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+  Button
+</button>
+
+<!-- Outline -->
+<button class="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
+  Button
+</button>
+
+<!-- Responsive sizes -->
+<button class="px-3 py-1.5 text-sm md:px-4 md:py-2 md:text-base">
+  Responsive Button
+</button>
+```
+
+### Forms & Inputs
+```vue
+<!-- Input field -->
+<input
+  type="text"
+  class="w-full px-3 md:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm md:text-base"
+  placeholder="Enter text"
+/>
+
+<!-- Select dropdown -->
+<select class="w-full px-3 md:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+  <option>Option 1</option>
+</select>
+
+<!-- Textarea -->
+<textarea
+  rows="3"
+  class="w-full px-3 md:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm md:text-base"
+></textarea>
+
+<!-- Label -->
+<label class="block text-sm font-medium text-gray-700 mb-2">
+  Label Text
+</label>
+```
+
+### Tables
+```vue
+<!-- Table container -->
+<div class="overflow-x-auto bg-white rounded-lg shadow">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Header
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <tr class="hover:bg-gray-50">
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          Data
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+### Statistics Cards
+```vue
+<div class="bg-white rounded-lg shadow p-4 md:p-6">
+  <div class="flex items-center">
+    <div class="flex-shrink-0 bg-blue-500 rounded-lg p-2 md:p-3">
+      <!-- Icon SVG -->
+    </div>
+    <div class="ml-3 md:ml-4">
+      <p class="text-xs md:text-sm font-medium text-gray-600">Label</p>
+      <p class="text-xl md:text-2xl font-semibold text-gray-800">Value</p>
+    </div>
+  </div>
+</div>
+```
+
+### Sidebar/Navigation
+```vue
+<!-- Sidebar link -->
+<a class="flex items-center px-4 md:px-6 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition duration-200">
+  <svg class="w-5 h-5 mr-3 flex-shrink-0"><!-- icon --></svg>
+  <span class="truncate">Menu Item</span>
+</a>
+
+<!-- Active state -->
+<a class="bg-gray-700 text-white border-l-4 border-blue-500">
+  <!-- Active link -->
+</a>
+```
+
+## Layout Patterns
+
+### Page Header
+```vue
+<div class="mb-4 md:mb-6">
+  <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Page Title</h1>
+  <p class="text-sm md:text-base text-gray-600 mt-1">Description</p>
+</div>
+```
+
+### Action Bar
+```vue
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+  <p class="text-xs md:text-sm text-gray-600">Info text</p>
+  <button class="w-full md:w-auto">Action Button</button>
+</div>
+```
+
+### Content Container
+```vue
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Content -->
+</div>
+```
+
+## Typography
+
+### Headings
+```vue
+<h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">
+<h2 class="text-xl md:text-2xl font-semibold text-gray-800">
+<h3 class="text-lg md:text-xl font-semibold text-gray-800">
+<h4 class="text-base md:text-lg font-medium text-gray-800">
+```
+
+### Body Text
+```vue
+<p class="text-sm md:text-base text-gray-600">
+<p class="text-xs md:text-sm text-gray-500">
+```
+
+### Font Weights
+- `font-normal` - 400
+- `font-medium` - 500
+- `font-semibold` - 600
+- `font-bold` - 700
+
+## Transitions & Animations
+
+```vue
+<!-- Hover transitions -->
+<div class="transition duration-200 hover:shadow-lg">
+
+<!-- Focus states -->
+<input class="focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+
+<!-- Button transitions -->
+<button class="transition duration-200 hover:bg-blue-700">
+```
+
+## Spacing Scale
+
+```vue
+<!-- Padding -->
+p-1  (0.25rem / 4px)
+p-2  (0.5rem  / 8px)
+p-3  (0.75rem / 12px)
+p-4  (1rem    / 16px)
+p-6  (1.5rem  / 24px)
+p-8  (2rem    / 32px)
+
+<!-- Margin -->
+m-1, m-2, m-3, m-4, m-6, m-8
+
+<!-- Gap -->
+gap-2, gap-3, gap-4, gap-6
+
+<!-- Responsive example -->
+p-3 md:p-4 lg:p-6
+gap-3 md:gap-4 lg:gap-6
+```
+
+## Best Practices
+
+### ✅ Do:
+- Use mobile-first responsive classes
+- Combine hover and transition classes
+- Use focus states on interactive elements
+- Keep consistent spacing scale
+- Use semantic color names (blue for primary, red for danger)
+- Test on all breakpoints
+- Use `flex-shrink-0` for icons in flex containers
+- Use `truncate` for text overflow
+
+### ❌ Don't:
+- Write custom CSS (use Tailwind utilities)
+- Forget responsive classes
+- Use arbitrary values unless necessary
+- Mix spacing scales inconsistently
+- Ignore hover/focus states
+- Use !important
+- Hardcode colors (use Tailwind palette)
+
+## Dark Mode (Future)
+
+Prepare for dark mode by using semantic classes:
+```vue
+<!-- Will work with dark mode -->
+<div class="bg-white dark:bg-gray-800">
+  <p class="text-gray-900 dark:text-gray-100">Text</p>
+</div>
+```
+
+## Configuration
+
+Tailwind config in [tailwind.config.js](mdc:tailwind.config.js) includes:
+- Content paths for all Vue files
+- Theme extensions (if any)
+- Plugin configurations

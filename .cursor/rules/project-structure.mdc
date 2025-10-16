@@ -1,0 +1,109 @@
+---
+alwaysApply: true
+description: Core project structure and architecture guidelines for LMS Dashboard
+---
+
+# LMS Dashboard - Project Structure
+
+## Technology Stack
+- **Framework**: Vue 3 with Composition API
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS v3
+- **State Management**: Pinia
+- **Routing**: Vue Router with navigation guards
+- **Language**: JavaScript (ES6+)
+
+## Project Architecture
+
+### Entry Point
+Main entry point is [src/main.js](mdc:src/main.js) which initializes:
+- Vue app
+- Pinia store
+- Vue Router
+- Auth check on startup
+
+### Folder Structure
+
+```
+src/
+├── components/     # Reusable components (BaseButton, BaseTable, etc)
+├── layouts/        # Layout wrappers (MainLayout with Sidebar)
+├── views/          # Page components organized by module
+├── stores/         # Pinia stores for state management
+├── router/         # Route definitions and guards
+├── assets/         # Static assets
+└── style.css       # Global Tailwind CSS
+```
+
+### Store Organization
+All Pinia stores are in [src/stores/](mdc:src/stores) directory:
+- [auth.js](mdc:src/stores/auth.js) - Authentication state
+- [users.js](mdc:src/stores/users.js) - User management (Admin/Instructor/Student)
+- [courses.js](mdc:src/stores/courses.js) - Course management
+- [members.js](mdc:src/stores/members.js) - Member management
+- [materials.js](mdc:src/stores/materials.js) - Learning materials
+- [assessments.js](mdc:src/stores/assessments.js) - Quizzes & exams
+- [progress.js](mdc:src/stores/progress.js) - Progress tracking
+- [announcements.js](mdc:src/stores/announcements.js) - Announcements
+- [payments.js](mdc:src/stores/payments.js) - Payments & billing
+
+### View Organization
+Views are organized by module in [src/views/](mdc:src/views):
+- Each module has: `Index.vue`, `Create.vue`, `Edit.vue`, `Detail.vue`
+- Special pages: `Login.vue`, `Dashboard.vue`, `Profile.vue`
+
+### Component Organization
+Reusable components in [src/components/](mdc:src/components):
+- `BaseButton.vue` - Button with variants (primary, secondary, success, danger, warning, outline)
+- `BaseTable.vue` - Data table with slots for customization
+- `SearchInput.vue` - Search input with icon
+- `FilterDropdown.vue` - Filter dropdown component
+- `Breadcrumb.vue` - Breadcrumb navigation
+- `Sidebar.vue` - Responsive sidebar with mobile menu
+
+### Layout System
+[MainLayout.vue](mdc:src/layouts/MainLayout.vue) wraps all authenticated pages with:
+- Responsive sidebar (collapsible on mobile)
+- Main content area with proper spacing
+- Mobile-first responsive design
+
+## Important Conventions
+
+### Naming Conventions
+- **Components**: PascalCase (e.g., `BaseButton.vue`, `UsersList.vue`)
+- **Stores**: camelCase files (e.g., `auth.js`, `users.js`)
+- **Routes**: kebab-case paths (e.g., `/users`, `/courses/create`)
+- **Variables**: camelCase (e.g., `userData`, `isLoading`)
+
+### File Organization
+- Group related files by feature/module
+- Keep components small and focused
+- Extract reusable logic into composables
+- Use stores for shared state
+
+### Responsive Design
+- Mobile-first approach (min-width breakpoints)
+- Breakpoints: `sm:` (640px), `md:` (768px), `lg:` (1024px), `xl:` (1280px)
+- Always test on mobile, tablet, and desktop viewports
+
+## Module Status
+
+### Fully Implemented (UI + Store):
+- User Management (Admin/Instructor/Student roles)
+- Course Management
+- Member Management
+- Profile Management
+- Dashboard with revenue tracking
+
+### Store Ready (Backend-ready, UI pending):
+- Content Management (Materials)
+- Assessment & Testing
+- Progress Tracking
+- Communication (Announcements)
+- Payment & Billing
+
+## Key Files to Reference
+- [README.md](mdc:README.md) - Complete documentation
+- [MODULES.md](mdc:MODULES.md) - Detailed module documentation
+- [IMPLEMENTATION_SUMMARY.md](mdc:IMPLEMENTATION_SUMMARY.md) - Implementation status
+- [package.json](mdc:package.json) - Dependencies and scripts

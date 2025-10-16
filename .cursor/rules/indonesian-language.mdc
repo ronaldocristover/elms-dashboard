@@ -1,0 +1,317 @@
+---
+alwaysApply: true
+description: Indonesian language usage guidelines for LMS Dashboard
+---
+
+# Panduan Bahasa Indonesia
+
+## Prinsip Umum
+
+Aplikasi LMS Dashboard ini menggunakan **Bahasa Indonesia** untuk semua teks yang user-facing (yang dilihat pengguna).
+
+## Penamaan dalam UI
+
+### Label dan Judul
+- Gunakan bahasa Indonesia yang jelas dan mudah dipahami
+- Hindari istilah teknis jika ada padanan bahasa Indonesia yang umum
+
+### Contoh yang Benar:
+```vue
+<!-- ✅ Benar -->
+<h1>Manajemen Kursus</h1>
+<button>Tambah Kursus</button>
+<p>Tidak ada data</p>
+<label>Nama Lengkap</label>
+
+<!-- ❌ Salah -->
+<h1>Course Management</h1>
+<button>Add Course</button>
+<p>No data</p>
+<label>Full Name</label>
+```
+
+## Istilah Umum
+
+### Status
+- `active` → **Aktif**
+- `inactive` → **Nonaktif**
+- `pending` → **Menunggu**
+- `completed` → **Selesai**
+- `in_progress` → **Sedang Berlangsung**
+
+### Actions (Aksi)
+- Create → **Tambah** / **Buat**
+- Edit → **Edit** / **Ubah**
+- Delete → **Hapus**
+- View → **Lihat** / **Detail**
+- Save → **Simpan**
+- Cancel → **Batal**
+- Submit → **Kirim**
+- Update → **Perbarui** / **Update**
+- Search → **Cari**
+- Filter → **Filter** / **Saring**
+
+### Role (Peran)
+- Admin → **Admin**
+- Instructor → **Instruktur**
+- Student → **Siswa**
+
+### Module Names
+- Dashboard → **Dashboard**
+- Course → **Kursus**
+- Member → **Member**
+- User → **User** / **Pengguna**
+- Profile → **Profil**
+- Material → **Materi**
+- Assessment → **Penilaian** / **Ujian**
+- Quiz → **Kuis**
+- Exam → **Ujian**
+- Assignment → **Tugas**
+- Progress → **Progres** / **Kemajuan**
+- Certificate → **Sertifikat**
+- Announcement → **Pengumuman**
+- Payment → **Pembayaran**
+- Invoice → **Invoice** / **Faktur**
+- Subscription → **Langganan**
+
+## Pesan Umum
+
+### Konfirmasi
+```javascript
+// ✅ Benar
+if (confirm('Apakah Anda yakin ingin menghapus kursus ini?')) {
+  deleteCourse()
+}
+
+// ❌ Salah  
+if (confirm('Are you sure you want to delete this course?')) {
+  deleteCourse()
+}
+```
+
+### Alert dan Notifikasi
+```javascript
+// ✅ Benar
+alert('Data berhasil disimpan!')
+alert('Terjadi kesalahan. Silakan coba lagi.')
+
+// ❌ Salah
+alert('Data saved successfully!')
+alert('An error occurred. Please try again.')
+```
+
+### Placeholder Text
+```vue
+<!-- ✅ Benar -->
+<input placeholder="Masukkan nama lengkap" />
+<input placeholder="Cari kursus..." />
+<textarea placeholder="Deskripsi kursus"></textarea>
+
+<!-- ❌ Salah -->
+<input placeholder="Enter full name" />
+<input placeholder="Search courses..." />
+<textarea placeholder="Course description"></textarea>
+```
+
+## Kode dan Variabel
+
+### Kode Tetap Bahasa Inggris
+```javascript
+// ✅ Benar - Kode dalam bahasa Inggris
+const userName = 'Ahmad'
+const isActive = true
+const courseData = {}
+
+function handleSubmit() {
+  // code
+}
+
+// ❌ Salah - Jangan gunakan bahasa Indonesia di kode
+const namaPengguna = 'Ahmad'  
+const apakahAktif = true
+const dataKursus = {}
+
+function tanganiSubmit() {
+  // code
+}
+```
+
+### UI Text Bahasa Indonesia
+```vue
+<script setup>
+// Kode dalam bahasa Inggris
+const isLoading = ref(false)
+const errorMessage = ref('')
+
+const handleSave = () => {
+  // code
+}
+</script>
+
+<template>
+  <!-- UI text dalam bahasa Indonesia -->
+  <div v-if="isLoading">Memuat data...</div>
+  <div v-if="errorMessage">{{ errorMessage }}</div>
+  <button @click="handleSave">Simpan</button>
+</template>
+```
+
+## Contoh Lengkap
+
+### Form Labels
+```vue
+<template>
+  <form @submit.prevent="handleSubmit">
+    <div>
+      <label>Judul Kursus *</label>
+      <input v-model="form.title" placeholder="Masukkan judul kursus" />
+    </div>
+
+    <div>
+      <label>Deskripsi *</label>
+      <textarea v-model="form.description" placeholder="Deskripsi lengkap kursus"></textarea>
+    </div>
+
+    <div>
+      <label>Kategori *</label>
+      <select v-model="form.category">
+        <option value="">Pilih Kategori</option>
+        <option value="programming">Programming</option>
+        <option value="design">Design</option>
+      </select>
+    </div>
+
+    <div class="flex justify-end space-x-4">
+      <BaseButton type="button" variant="outline" @click="cancel">
+        Batal
+      </BaseButton>
+      <BaseButton type="submit">
+        Simpan Kursus
+      </BaseButton>
+    </div>
+  </form>
+</template>
+```
+
+### Table Headers
+```javascript
+const columns = [
+  { key: 'name', label: 'Nama' },
+  { key: 'email', label: 'Email' },
+  { key: 'role', label: 'Role' },
+  { key: 'status', label: 'Status' },
+  { key: 'createdAt', label: 'Tanggal Dibuat' }
+]
+```
+
+### Breadcrumbs
+```javascript
+const breadcrumbs = [
+  { label: 'Dashboard', to: '/dashboard' },
+  { label: 'Manajemen Kursus', to: '/courses' },
+  { label: 'Tambah Kursus' }
+]
+```
+
+### Page Titles
+```vue
+<template>
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Manajemen Kursus</h1>
+    <p class="text-gray-600 mt-1">Kelola semua kursus yang tersedia</p>
+  </div>
+</template>
+```
+
+### Empty States
+```vue
+<template>
+  <div v-if="courses.length === 0" class="text-center py-8">
+    <p class="text-gray-500">Tidak ada kursus tersedia</p>
+    <BaseButton @click="createCourse" class="mt-4">
+      Tambah Kursus Pertama
+    </BaseButton>
+  </div>
+</template>
+```
+
+### Loading States
+```vue
+<template>
+  <div v-if="isLoading" class="text-center py-8">
+    <p class="text-gray-500">Memuat data...</p>
+  </div>
+</template>
+```
+
+### Error Messages
+```vue
+<template>
+  <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+    <p>{{ error }}</p>
+    <p class="text-sm mt-1">Silakan coba lagi atau hubungi administrator.</p>
+  </div>
+</template>
+```
+
+## Format Tanggal dan Angka
+
+### Tanggal
+```javascript
+// Format Indonesia
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('id-ID', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  })
+}
+// Output: "16 Oktober 2024"
+```
+
+### Angka dan Currency
+```javascript
+// Format Rupiah
+const price = 500000
+const formatted = `Rp ${price.toLocaleString('id-ID')}`
+// Output: "Rp 500.000"
+```
+
+## Komentar Kode
+
+### Komentar dapat dalam Bahasa Indonesia atau Inggris
+```javascript
+// ✅ Bahasa Inggris (preferred untuk code sharing)
+// Initialize user data
+const userData = ref(null)
+
+// ✅ Bahasa Indonesia (jika tim lokal)
+// Inisialisasi data user
+const userData = ref(null)
+```
+
+## Best Practices
+
+### ✅ Do:
+- Gunakan bahasa Indonesia untuk semua UI text
+- Gunakan bahasa Indonesia untuk labels, buttons, messages
+- Gunakan format tanggal dan angka Indonesia
+- Konsisten dengan istilah yang dipilih
+- Kode dan variabel tetap dalam bahasa Inggris
+
+### ❌ Don't:
+- Campur bahasa Inggris dan Indonesia di UI
+- Gunakan bahasa Indonesia untuk nama variabel/fungsi
+- Inkonsisten dalam istilah (kadang "Hapus", kadang "Delete")
+- Gunakan terjemahan kaku yang sulit dipahami
+- Lupa format tanggal/angka sesuai locale Indonesia
+
+## Referensi Teks di Aplikasi
+
+Lihat implementasi di:
+- [Login.vue](mdc:src/views/Login.vue) - Form login
+- [Dashboard.vue](mdc:src/views/Dashboard.vue) - Dashboard utama
+- [src/views/users/Index.vue](mdc:src/views/users/Index.vue) - Halaman list
+- [src/views/courses/Create.vue](mdc:src/views/courses/Create.vue) - Form create
+- [Sidebar.vue](mdc:src/components/Sidebar.vue) - Menu navigasi

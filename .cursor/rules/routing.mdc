@@ -1,0 +1,393 @@
+---
+globs: src/router/*.js
+description: Vue Router configuration and navigation patterns
+---
+
+# Vue Router Guidelines
+
+## Router Configuration
+
+Main router configuration in [src/router/index.js](mdc:src/router/index.js).
+
+### Route Structure Pattern
+
+```javascript
+import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
+
+const routes = [
+  {
+    path: '/',
+    redirect: '/login'
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/Login.vue'),
+    meta: { guest: true }
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () => import('../views/Dashboard.vue'),
+    meta: { requiresAuth: true }
+  }
+]
+```
+
+## Route Naming Conventions
+
+### Path Patterns
+- Use kebab-case: `/users`, `/course-materials`
+- Plural for lists: `/courses`, `/members`
+- Nested paths: `/courses/:id`, `/courses/:id/edit`
+
+### Route Names
+- Use PascalCase: `'CoursesIndex'`, `'UsersCreate'`
+- Pattern: `{Module}{Action}` - `'CoursesEdit'`, `'MembersDetail'`
+
+### Examples
+```javascript
+// Module routes pattern
+{
+  path: '/modules',
+  name: 'ModulesIndex',
+  component: ModulesIndex
+},
+{
+  path: '/modules/create',
+  name: 'ModulesCreate',
+  component: ModulesCreate
+},
+{
+  path: '/modules/:id',
+  name: 'ModulesDetail',
+  component: ModulesDetail
+},
+{
+  path: '/modules/:id/edit',
+  name: 'ModulesEdit',
+  component: ModulesEdit
+}
+```
+
+## Authentication Guards
+
+### Meta Fields
+```javascript
+{
+  path: '/dashboard',
+  meta: {
+    requiresAuth: true,  // Requires authentication
+    role: 'admin'        // Requires specific role (optional)
+  }
+}
+```
+
+### Global Guard Implementation
+```javascript
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+  
+  // Check authentication
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    next('/login')
+  }
+  // Redirect authenticated users from login
+  else if (to.path === '/login' && authStore.isAuthenticated) {
+    next('/dashboard')
+  }
+  else {
+    next()
+  }
+})
+```
+
+## Existing Routes
+
+### Public Routes
+- `/` → redirect to `/login`
+- `/login` → Login page
+
+### Protected Routes
+
+#### Dashboard
+- `/dashboard` → Main dashboard
+
+#### User Management
+- `/users` → User list
+- `/users/create` → Create user
+- `/users/:id` → User detail
+- `/users/:id/edit` → Edit user
+
+#### Profile
+- `/profile` → User profile
+
+#### Course Management
+- `/courses` → Course list
+- `/courses/create` → Create course
+- `/courses/:id` → Course detail
+- `/courses/:id/edit` → Edit course
+
+#### Member Management
+- `/members` → Member list
+- `/members/create` → Create member
+- `/members/:id` → Member detail
+- `/members/:id/edit` → Edit member
+
+## Navigation in Components
+
+### Programmatic Navigation
+```javascript
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+// Navigate to route
+router.push('/users')
+router.push({ name: 'UsersDetail', params: { id: 1 } })
+
+// Navigate with query params
+router.push({ path: '/courses', query: { category: 'programming' } })
+
+// Go back
+router.back()
+router.go(-1)
+```
+
+### Router Link Component
+```vue
+<template>
+  <!-- By path -->
+  <router-link to="/users" class="...">Users</router-link>
+
+  <!-- By name with params -->
+  <router-link
+    :to="{ name: 'UsersDetail', params: { id: user.id } }"
+    class="..."
+  >
+    View Details
+  </router-link>
+
+  <!-- With active class -->
+  <router-link
+    to="/dashboard"
+    active-class="bg-gray-700 text-white border-l-4 border-blue-500"
+    class="flex items-center px-6 py-3"
+  >
+    Dashboard
+  </router-link>
+</template>
+```
+
+### Access Route Info
+```javascript
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+// Get params
+const userId = route.params.id
+const courseId = route.params.id
+
+// Get query
+const category = route.query.category
+const page = route.query.page
+
+// Get full path
+const currentPath = route.path
+
+// Get route name
+const routeName = route.name
+```
+
+## Breadcrumb Integration
+
+Use route meta for breadcrumb generation:
+
+```javascript
+{
+  path: '/courses/:id/edit',
+  name: 'CoursesEdit',
+  component: CoursesEdit,
+  meta: {
+    requiresAuth: true,
+    breadcrumbs: [
+      { label: 'Dashboard', to: '/dashboard' },
+      { label: 'Courses', to: '/courses' },
+      { label: 'Edit Course' }
+    ]
+  }
+}
+```
+
+In component:
+```vue
+<template>
+  <Breadcrumb :items="breadcrumbs" />
+</template>
+
+<script setup>
+const breadcrumbs = [
+  { label: 'Dashboard', to: '/dashboard' },
+  { label: 'Courses', to: '/courses' },
+  { label: 'Edit Course' }
+]
+</script>
+```
+
+## Lazy Loading Routes
+
+Use dynamic imports for better performance:
+
+```javascript
+const routes = [
+  {
+    path: '/courses',
+    component: () => import('../views/courses/Index.vue')
+  },
+  {
+    path: '/courses/create',
+    component: () => import('../views/courses/Create.vue')
+  }
+]
+```
+
+## Future Module Routes (When UI is built)
+
+### Content/Materials
+```javascript
+{
+  path: '/materials',
+  name: 'MaterialsIndex',
+  component: () => import('../views/materials/Index.vue'),
+  meta: { requiresAuth: true }
+},
+{
+  path: '/materials/create',
+  name: 'MaterialsCreate',
+  component: () => import('../views/materials/Create.vue'),
+  meta: { requiresAuth: true, role: 'instructor' }
+}
+```
+
+### Assessments
+```javascript
+{
+  path: '/assessments',
+  name: 'AssessmentsIndex',
+  component: () => import('../views/assessments/Index.vue'),
+  meta: { requiresAuth: true }
+}
+```
+
+### Progress
+```javascript
+{
+  path: '/progress',
+  name: 'ProgressIndex',
+  component: () => import('../views/progress/Index.vue'),
+  meta: { requiresAuth: true }
+}
+```
+
+### Announcements
+```javascript
+{
+  path: '/announcements',
+  name: 'AnnouncementsIndex',
+  component: () => import('../views/announcements/Index.vue'),
+  meta: { requiresAuth: true }
+}
+```
+
+### Payments
+```javascript
+{
+  path: '/payments',
+  name: 'PaymentsIndex',
+  component: () => import('../views/payments/Index.vue'),
+  meta: { requiresAuth: true, role: 'admin' }
+}
+```
+
+## Error Handling
+
+### 404 Not Found
+```javascript
+{
+  path: '/:pathMatch(.*)*',
+  name: 'NotFound',
+  component: () => import('../views/NotFound.vue')
+}
+```
+
+### Redirect Examples
+```javascript
+// Redirect old path to new
+{
+  path: '/old-path',
+  redirect: '/new-path'
+},
+// Redirect with function
+{
+  path: '/users/:id',
+  redirect: to => {
+    return { path: '/profile', query: { id: to.params.id } }
+  }
+}
+```
+
+## Best Practices
+
+### ✅ Do:
+- Use lazy loading for routes
+- Add meta fields for auth requirements
+- Use named routes for navigation
+- Implement navigation guards
+- Use kebab-case for paths
+- Use PascalCase for route names
+- Group related routes
+- Handle 404 errors
+
+### ❌ Don't:
+- Hardcode paths in templates (use route names)
+- Forget authentication checks
+- Create routes without meta info
+- Use inconsistent naming
+- Forget to handle errors
+- Skip lazy loading for better performance
+- Leave routes unprotected
+
+## Testing Routes
+
+```javascript
+// In components, test navigation
+const router = useRouter()
+
+const handleClick = async () => {
+  try {
+    await router.push('/users')
+  } catch (error) {
+    console.error('Navigation failed:', error)
+  }
+}
+```
+
+## Router Instance
+
+Access router in script setup:
+```javascript
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()  // For navigation
+const route = useRoute()    // For current route info
+```
+
+Access in template (not needed, use router-link):
+```vue
+<template>
+  <button @click="$router.push('/users')">Go to Users</button>
+  <p>Current path: {{ $route.path }}</p>
+</template>
+```
